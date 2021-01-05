@@ -4,6 +4,7 @@ import (
 	"point/cmd/server/config"
 	"point/internal/handler/api"
 	"point/internal/handler/health"
+	"point/internal/handler/swagger"
 	"point/internal/server"
 
 	"github.com/gofiber/fiber/v2"
@@ -27,6 +28,7 @@ func provideRouter(api api.Server) *fiber.App {
 	r := fiber.New()
 	r.Mount("/healthz", health.Handler())
 	r.Mount("/api", api.Handler())
+	r.Mount("/swagger", swagger.Handler())
 	return r
 }
 

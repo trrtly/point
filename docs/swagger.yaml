@@ -1,0 +1,10 @@
+info:
+  contact:
+    email: wenlong.chen@youyaomedtech.com
+    name: wenlong
+    url: http://yy-git.youyao99.com/youyao/point
+  description: 优药积分系统 api
+  title: 优药积分系统 api
+  version: "1.0"
+paths: {}
+swagger: "2.0"

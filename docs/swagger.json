@@ -1,0 +1,14 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "优药积分系统 api",
+        "title": "优药积分系统 api",
+        "contact": {
+            "name": "wenlong",
+            "url": "http://yy-git.youyao99.com/youyao/point",
+            "email": "wenlong.chen@youyaomedtech.com"
+        },
+        "version": "1.0"
+    },
+    "paths": {}
+}
