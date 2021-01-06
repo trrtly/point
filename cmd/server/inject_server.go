@@ -28,7 +28,7 @@ func provideRouter(api api.Server) *fiber.App {
 	r := fiber.New()
 	r.Mount("/healthz", health.Handler())
 	r.Mount("/api", api.Handler())
-	r.Mount("/swagger", swagger.Handler())
+	r.Mount("/point-swagger", swagger.Handler())
 	return r
 }
 
