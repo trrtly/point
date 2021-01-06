@@ -22,7 +22,11 @@ func init() {
 
 // Response defines reponse context for the api
 type Response struct {
-	Code int64       `json:"code"`
+	// `code` 错误码
+	// 全局错误码说明：
+	// `1001` 用户不存在
+	Code int64 `json:"code"`
+	// `msg` 错误信息
 	Msg  string      `json:"msg"`
 	Data interface{} `json:"data"`
 }
@@ -120,7 +124,6 @@ func Success(c *fiber.Ctx, v interface{}) error {
 // Fail reponse an json-encoded api fail data
 func Fail(c *fiber.Ctx, err error) error {
 	return JSON(c, &Response{
-		Code: http.StatusOK,
 		Msg:  err.Error(),
 	}, http.StatusOK)
 }

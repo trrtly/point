@@ -5,16 +5,8 @@ import (
 	"point/internal/handler/api/render"
 	"strconv"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
-
-type findValid struct {
-	UID string `validate:"required,min=1,max=64"`
-}
-
-// use a single instance of Validate, it caches struct info
-var validate *validator.Validate
 
 // HandleFind returns an fiber.Handler that writes a json-encoded
 // user assets details to the response body.

@@ -1,3 +1,49 @@
+definitions:
+  activity.Create:
+    properties:
+      activityCode:
+        description: 事件编号
+        type: string
+      specialCode:
+        description: 特例编号
+        type: string
+      specialVal:
+        description: 特例数值
+        type: string
+      uid:
+        description: 用户 id
+        type: integer
+    required:
+    - activityCode
+    - uid
+    type: object
+  page.Create:
+    properties:
+      uid:
+        description: 用户id
+        type: integer
+      uri:
+        description: 页面路径的 `path` 部分，例如：`http://api.youyao.com/user/point`，则 `uri`
+          为 `user/point`
+        type: string
+    required:
+    - uid
+    - uri
+    type: object
+  render.Response:
+    properties:
+      code:
+        description: |-
+          `code` 错误码
+          全局错误码说明：
+          `1001` 用户不存在
+        type: integer
+      data:
+        type: object
+      msg:
+        description: '`msg` 错误信息'
+        type: string
+    type: object
 info:
   contact:
     email: wenlong.chen@youyaomedtech.com
@@ -6,5 +52,57 @@ info:
   description: 优药积分系统 api
   title: 优药积分系统 api
   version: "1.0"
-paths: {}
+paths:
+  /api/point/activity:
+    post:
+      consumes:
+      - application/json
+      description: 添加事件积分
+      parameters:
+      - description: 请求参数
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/activity.Create'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+        "400":
+          description: 失败返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+      summary: 添加事件积分
+      tags:
+      - 事件积分
+  /api/point/page:
+    post:
+      consumes:
+      - application/json
+      description: 添加页面浏览积分
+      parameters:
+      - description: 请求参数
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/page.Create'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+        "400":
+          description: 失败返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+      summary: 添加页面浏览积分
+      tags:
+      - 页面浏览积分
 swagger: "2.0"
