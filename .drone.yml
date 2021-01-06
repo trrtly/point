@@ -24,8 +24,8 @@ steps:
     target: /data/code/point
     include: [ "point-server" ]
     delete: true
-  scripts:
-  - "kubectl -n testing rollout restart deployment point"
+    script:
+      - "kubectl -n testing rollout restart deployment point"
 
 trigger:
   branch:
