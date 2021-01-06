@@ -1,0 +1,34 @@
+kind: pipeline
+type: kubernetes
+name: publish-testing
+
+clone:
+  disable: true
+
+steps:
+
+- name: build
+  image: golang:1.15
+  commands:
+  - "bash scripts/build.sh"
+
+- name: deploy
+  image: drillster/drone-rsync
+  environment:
+    RSYNC_KEY:
+      from_secret: rsync_key
+  settings:
+    hosts: [ "10.23.80.124" ]
+    user: release-robot
+    source: ./release
+    target: /data/code/point/release
+    include: [ "point-server" ]
+    delete: true
+  script:
+  - "kubectl -n testing rollout restart deployment point"
+
+trigger:
+  branch:
+  - develp
+  event:
+  - push

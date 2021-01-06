@@ -12,4 +12,4 @@ COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 LABEL com.centurylinklabs.watchtower.stop-signal="SIGINT"
 
-ENTRYPOINT ["/bin/point-agent"]
+ENTRYPOINT ["/bin/point-server"]
