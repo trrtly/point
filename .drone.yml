@@ -29,6 +29,6 @@ steps:
 
 trigger:
   branch:
-  - develp
+  - develop
   event:
   - push
