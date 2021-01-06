@@ -10,7 +10,7 @@ steps:
 - name: build
   image: golang:1.15
   commands:
-  - "bash scripts/build.sh"
+  - "bash ./scripts/build.sh"
 
 - name: deploy
   image: drillster/drone-rsync
