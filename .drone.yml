@@ -21,7 +21,7 @@ steps:
     hosts: [ "10.23.80.124" ]
     user: release-robot
     source: ./release
-    target: /data/code/point/release
+    target: /data/code/point
     include: [ "point-server" ]
     delete: true
   script:
