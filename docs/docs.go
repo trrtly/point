@@ -123,7 +123,7 @@ var doc = `{
                 },
                 "type": {
                     "description": "特例的类型 1 表示地域 2表示 角色  3表示产品  4表示医院  5表示特定数据\n问卷跟页面浏览都传 5",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "uid": {
                     "description": "用户 id",

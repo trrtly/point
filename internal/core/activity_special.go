@@ -8,14 +8,15 @@ type (
 	// ActivitySpecial defines user_assets table
 	ActivitySpecial struct {
 		ID            int32     `json:"id"`
-		Yyid          string    `json:"yyid"`
+		ActivityID    int32     `json:"activity_id"`
 		Name          string    `json:"name"`
-		EventKey      string    `json:"event_key"`
+		SType         string    `json:"s_type"`
+		SValue        string    `json:"s_value"`
+		STableName    string    `json:"s_table_name"`
 		StartTime     time.Time `json:"start_time"`
 		EndTime       time.Time `json:"end_time"`
 		MoneyPoint    float64   `json:"money_point"`
 		ServicePoint  float64   `json:"service_point"`
-		ExistSpecial  int8      `json:"exist_special"`
 		NumPreDay     int32     `json:"num_pre_day"`
 		NumTotal      int32     `json:"num_total"`
 		CreatedUserID string    `json:"created_user_id"`
@@ -26,8 +27,8 @@ type (
 
 	// ActivitySpecialStore defines operations for working with user_assets.
 	ActivitySpecialStore interface {
-		// FindEventKey returns a special event_key activity from the datastore.
-		FindEventKey(string) (*Activity, error)
+		// FindSVal returns a special val activity from the db.
+		FindSVal(int32, string) (*ActivitySpecial, error)
 	}
 )
 
