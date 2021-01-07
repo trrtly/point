@@ -9,9 +9,9 @@ import (
 
 type Create struct {
 	// 用户id
-	UID int64 `validate:"required,number"`
+	UID int64 `json:"uid" validate:"required,number"`
 	// 页面路径的 `path` 部分，例如：`http://api.youyao.com/user/point`，则 `uri` 为 `user/point`
-	URI string `validate:"required"`
+	PageName string `json:"pageName" validate:"required"`
 }
 
 // @Summary 添加页面浏览积分

@@ -35,16 +35,16 @@ definitions:
     type: object
   page.Create:
     properties:
-      uid:
-        description: 用户id
-        type: integer
-      uri:
+      pageName:
         description: 页面路径的 `path` 部分，例如：`http://api.youyao.com/user/point`，则 `uri`
           为 `user/point`
         type: string
+      uid:
+        description: 用户id
+        type: integer
     required:
+    - pageName
     - uid
-    - uri
     type: object
   render.Response:
     properties:
@@ -60,6 +60,7 @@ definitions:
         description: '`msg` 错误信息'
         type: string
     type: object
+host: http://point/
 info:
   contact:
     email: wenlong.chen@youyaomedtech.com

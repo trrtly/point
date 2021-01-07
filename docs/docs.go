@@ -200,17 +200,17 @@ var doc = `{
         "page.Create": {
             "type": "object",
             "required": [
-                "uid",
-                "uri"
+                "pageName",
+                "uid"
             ],
             "properties": {
+                "pageName": {
+                    "description": "页面路径的 ` + "`" + `path` + "`" + ` 部分，例如：` + "`" + `http://api.youyao.com/user/point` + "`" + `，则 ` + "`" + `uri` + "`" + ` 为 ` + "`" + `user/point` + "`" + `",
+                    "type": "string"
+                },
                 "uid": {
                     "description": "用户id",
                     "type": "integer"
-                },
-                "uri": {
-                    "description": "页面路径的 ` + "`" + `path` + "`" + ` 部分，例如：` + "`" + `http://api.youyao.com/user/point` + "`" + `，则 ` + "`" + `uri` + "`" + ` 为 ` + "`" + `user/point` + "`" + `",
-                    "type": "string"
                 }
             }
         },
@@ -245,7 +245,7 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
-	Host:        "",
+	Host:        "http://point/",
 	BasePath:    "",
 	Schemes:     []string{},
 	Title:       "优药积分系统 api",
