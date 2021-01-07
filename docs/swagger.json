@@ -51,6 +51,46 @@
                 }
             }
         },
+        "/api/point/goods": {
+            "post": {
+                "description": "积分兑换商品",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "兑换商品"
+                ],
+                "summary": "积分兑换商品",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/goods.Create"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回值",
+                        "schema": {
+                            "$ref": "#/definitions/render.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "失败返回值",
+                        "schema": {
+                            "$ref": "#/definitions/render.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/point/page": {
             "post": {
                 "description": "添加页面浏览积分",

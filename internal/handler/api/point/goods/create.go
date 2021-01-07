@@ -25,7 +25,7 @@ type Create struct {
 // @Param body body goods.Create true "请求参数"
 // @Success 200 object render.Response "成功返回值"
 // @Failure 400 object render.Response "失败返回值"
-// @Router /api/point/activity [post]
+// @Router /api/point/goods [post]
 func HandlerCreate() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		req := new(Create)

@@ -95,6 +95,32 @@ paths:
       summary: 添加事件积分
       tags:
       - 事件积分
+  /api/point/goods:
+    post:
+      consumes:
+      - application/json
+      description: 积分兑换商品
+      parameters:
+      - description: 请求参数
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/goods.Create'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+        "400":
+          description: 失败返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+      summary: 积分兑换商品
+      tags:
+      - 兑换商品
   /api/point/page:
     post:
       consumes:
