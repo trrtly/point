@@ -1,25 +1,27 @@
 package core
 
-import "time"
+import (
+	"time"
+)
 
 type (
 	// Activity defines user_assets table
 	Activity struct {
-		ID            int32   `json:"id"`
-		Yyid          string  `json:"yyid"`
-		Name          string  `json:"name"`
-		EventKey      string  `json:"event_key"`
-		StartTime     string  `json:"start_time"`
-		EndTime       string  `json:"end_time"`
-		MoneyPoint    float64 `json:"money_point"`
-		ServicePoint  float64 `json:"service_point"`
-		ExistSpecial  int8    `json:"exist_special"`
-		NumPreDay     int32   `json:"num_pre_day"`
-		NumTotal      int32   `json:"num_total"`
-		CreatedUserID string  `json:"created_user_id"`
-		Status        int8    `json:"status"`
-		CreatedTime   string  `json:"-"`
-		ModifyTime    string  `json:"-"`
+		ID            int32     `json:"id"`
+		Yyid          string    `json:"yyid"`
+		Name          string    `json:"name"`
+		EventKey      string    `json:"event_key"`
+		StartTime     time.Time `json:"start_time"`
+		EndTime       time.Time `json:"end_time"`
+		MoneyPoint    float64   `json:"money_point"`
+		ServicePoint  float64   `json:"service_point"`
+		ExistSpecial  int8      `json:"exist_special"`
+		NumPreDay     int32     `json:"num_pre_day"`
+		NumTotal      int32     `json:"num_total"`
+		CreatedUserID string    `json:"created_user_id"`
+		Status        int8      `json:"status"`
+		CreatedTime   string    `json:"-"`
+		ModifyTime    string    `json:"-"`
 	}
 
 	// ActivityStore defines operations for working with user_assets.
@@ -42,24 +44,24 @@ func (a *Activity) IsRegular() bool {
 // IsStarted defines the activity is started
 func (a *Activity) IsStarted() bool {
 	today := time.Now()
-	startTime, err := time.Parse("2006-01-02 03:04:05", a.StartTime)
-	if err != nil {
-		return false
-	}
-	return today.After(startTime)
+	return today.After(a.StartTime)
 }
 
 // IsNotEnded defines the activity is not ended
 func (a *Activity) IsNotEnded() bool {
-	today := time.Now()
-	endTime, err := time.Parse("2006-01-02 03:04:05", a.EndTime)
-	if err != nil {
-		return false
+	if a.EndTime.IsZero() {
+		return true
 	}
-	return today.Before(endTime)
+	today := time.Now()
+	return today.Before(a.EndTime)
 }
 
 // IsActivite defines the activity is activite
 func (a *Activity) IsActivite() bool {
 	return a.IsRegular() && a.IsStarted() && a.IsNotEnded()
+}
+
+// HasSpecial defines the activity has special
+func (a *Activity) HasSpecial() bool {
+	return a.ExistSpecial == StatusRegular
 }

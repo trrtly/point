@@ -14,15 +14,16 @@ type Create struct {
 	// 用户 id
 	UID int64 `json:"uid" validate:"required,number"`
 	// 事件编号
-	ActivityCode string `json:"activityCode" validate:"required"`
-	// 特例编号
-	SpecialCode string `json:"specialCode"`
+	Key string `json:"key" validate:"required"`
+	// 特例的类型 1 表示地域 2表示 角色  3表示产品  4表示医院  5表示特定数据
+	// 问卷跟页面浏览都传 5
+	Type string `json:"type"`
 	// 特例数值
-	SpecialVal string `json:"specialVal"`
+	Val string `json:"val"`
 }
 
 // @Summary 添加事件积分
-// @Description 添加事件积分
+// @Description 添加事件积分，问卷事件 `key`: `question_answer`；页面浏览事件 `key`: `page_view`
 // @Tags 事件积分
 // @Version 1.0
 // @Accept json
@@ -44,20 +45,23 @@ func HandlerCreate(
 		if err := validate.Struct(req); err != nil {
 			return render.Fail(c, err)
 		}
-		activity, err := activity.FindEventKey(req.ActivityCode)
+		activity, err := activity.FindEventKey(req.Key)
 		if err != nil {
 			logrus.WithFields(
 				logrus.Fields{
-					"uid":          req.UID,
-					"activityCode": req.ActivityCode,
-					"specialCode":  req.SpecialCode,
-					"specialVal":   req.SpecialVal,
+					"uid":  req.UID,
+					"key":  req.Key,
+					"type": req.Type,
+					"val":  req.Val,
 				},
 			).Errorln("cannot find activity use the event_key")
 			return render.Fail(c, err)
 		}
 		if !activity.IsActivite() {
-			return render.Fail(c, errors.New("活动尚未发布或不在有效期内"))
+			return render.Fail(c, errors.New("事件尚未发布或不在有效期内"))
+		}
+		if activity.HasSpecial() {
+
 		}
 
 		return render.Success(c, activity)

@@ -1,20 +1,22 @@
 definitions:
   activity.Create:
     properties:
-      activityCode:
+      key:
         description: 事件编号
         type: string
-      specialCode:
-        description: 特例编号
-        type: string
-      specialVal:
-        description: 特例数值
+      type:
+        description: |-
+          特例的类型 1 表示地域 2表示 角色  3表示产品  4表示医院  5表示特定数据
+          问卷跟页面浏览都传 5
         type: string
       uid:
         description: 用户 id
         type: integer
+      val:
+        description: 特例数值
+        type: string
     required:
-    - activityCode
+    - key
     - uid
     type: object
   goods.Create:
@@ -31,19 +33,6 @@ definitions:
     required:
     - goodsNum
     - goodsYyid
-    - uid
-    type: object
-  page.Create:
-    properties:
-      pageName:
-        description: 页面路径的 `path` 部分，例如：`http://api.youyao.com/user/point`，则 `uri`
-          为 `user/point`
-        type: string
-      uid:
-        description: 用户id
-        type: integer
-    required:
-    - pageName
     - uid
     type: object
   render.Response:
@@ -74,7 +63,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: 添加事件积分
+      description: '添加事件积分，问卷事件 `key`: `question_answer`；页面浏览事件 `key`: `page_view`'
       parameters:
       - description: 请求参数
         in: body
@@ -122,30 +111,4 @@ paths:
       summary: 积分兑换商品
       tags:
       - 兑换商品
-  /api/point/page:
-    post:
-      consumes:
-      - application/json
-      description: 添加页面浏览积分
-      parameters:
-      - description: 请求参数
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/page.Create'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功返回值
-          schema:
-            $ref: '#/definitions/render.Response'
-        "400":
-          description: 失败返回值
-          schema:
-            $ref: '#/definitions/render.Response'
-      summary: 添加页面浏览积分
-      tags:
-      - 页面浏览积分
 swagger: "2.0"
