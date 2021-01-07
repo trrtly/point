@@ -2,10 +2,12 @@ package activity
 
 import (
 	"errors"
+	"point/internal/core"
 	"point/internal/handler/api/render"
 
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
+	"github.com/sirupsen/logrus"
 )
 
 type Create struct {
@@ -29,7 +31,9 @@ type Create struct {
 // @Success 200 object render.Response "成功返回值"
 // @Failure 400 object render.Response "失败返回值"
 // @Router /api/point/activity [post]
-func HandlerCreate() fiber.Handler {
+func HandlerCreate(
+	activity core.ActivityStore,
+) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		req := new(Create)
 
@@ -40,10 +44,22 @@ func HandlerCreate() fiber.Handler {
 		if err := validate.Struct(req); err != nil {
 			return render.Fail(c, err)
 		}
-		if req.ActivityCode != "question_answer" {
-			return render.Fail(c, errors.New("不支持的事件编号"))
+		activity, err := activity.FindEventKey(req.ActivityCode)
+		if err != nil {
+			logrus.WithFields(
+				logrus.Fields{
+					"uid":          req.UID,
+					"activityCode": req.ActivityCode,
+					"specialCode":  req.SpecialCode,
+					"specialVal":   req.SpecialVal,
+				},
+			).Errorln("cannot find activity use the event_key")
+			return render.Fail(c, err)
+		}
+		if !activity.IsActivite() {
+			return render.Fail(c, errors.New("活动尚未发布或不在有效期内"))
 		}
 
-		return render.Success(c, "ok")
+		return render.Success(c, activity)
 	}
 }

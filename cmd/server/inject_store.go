@@ -5,6 +5,7 @@ import (
 	"point/internal/core"
 	"point/internal/store/shared/db"
 	"point/internal/store/assets"
+	"point/internal/store/activity"
 
 	"github.com/google/wire"
 )
@@ -13,6 +14,7 @@ import (
 var storeSet = wire.NewSet(
 	provideDatabase,
 	provideAssetsStore,
+	provideActivityStore,
 )
 
 // provideDatabase is a Wire provider function that provides a
@@ -26,4 +28,11 @@ func provideDatabase(config config.Config) (*db.DB, error) {
 func provideAssetsStore(db *db.DB) core.UserAssetsStore {
 	assets := assets.New(db)
 	return assets
+}
+
+// provideActivityStore is a Wire provider function that provides a
+// activity datastore
+func provideActivityStore(db *db.DB) core.ActivityStore {
+	activity := activity.New(db)
+	return activity
 }

@@ -20,7 +20,8 @@ func InitializeApplication(config2 config.Config) (application, error) {
 	}
 	userAssetsStore := provideAssetsStore(db)
 	userAssetsService := user.New(userAssetsStore)
-	server := api.New(userAssetsStore, userAssetsService)
+	activityStore := provideActivityStore(db)
+	server := api.New(userAssetsStore, userAssetsService, activityStore)
 	app := provideRouter(server)
 	serverServer := provideServer(app, config2)
 	mainApplication := newApplication(serverServer, userAssetsStore)

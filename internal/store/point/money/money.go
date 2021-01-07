@@ -21,7 +21,7 @@ func (s *moneyStore) List(uid int64) (*core.UserMoneyPointDetail, error) {
 	out := &core.UserMoneyPointDetail{}
 	err := s.db.Select("*").
 		Where("uid = ?", uid).
-		Find(&out).Error
+		Find(out).Error
 	return out, err
 }
 

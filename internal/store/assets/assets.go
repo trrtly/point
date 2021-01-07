@@ -19,6 +19,6 @@ func (s *assetsStore) Find(uid int64) (*core.UserAssets, error) {
 	out := &core.UserAssets{}
 	err := s.db.Select("id,uid,money_point,service_point").
 		Where("uid = ?", uid).
-		First(&out).Error
+		First(out).Error
 	return out, err
 }

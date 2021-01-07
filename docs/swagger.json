@@ -118,6 +118,28 @@
                 }
             }
         },
+        "goods.Create": {
+            "type": "object",
+            "required": [
+                "goodsNum",
+                "goodsYyid",
+                "uid"
+            ],
+            "properties": {
+                "goodsNum": {
+                    "description": "商品数量",
+                    "type": "integer"
+                },
+                "goodsYyid": {
+                    "description": "商品编号",
+                    "type": "string"
+                },
+                "uid": {
+                    "description": "用户 id",
+                    "type": "integer"
+                }
+            }
+        },
         "page.Create": {
             "type": "object",
             "required": [

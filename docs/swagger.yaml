@@ -17,6 +17,22 @@ definitions:
     - activityCode
     - uid
     type: object
+  goods.Create:
+    properties:
+      goodsNum:
+        description: 商品数量
+        type: integer
+      goodsYyid:
+        description: 商品编号
+        type: string
+      uid:
+        description: 用户 id
+        type: integer
+    required:
+    - goodsNum
+    - goodsYyid
+    - uid
+    type: object
   page.Create:
     properties:
       uid:
