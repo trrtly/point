@@ -9,3 +9,4 @@ release/
 scripts/*.go
 docker/**/data
 TODO*
+t.go

@@ -3,9 +3,11 @@ package main
 import (
 	"point/cmd/server/config"
 	"point/internal/core"
-	"point/internal/store/shared/db"
-	"point/internal/store/assets"
 	"point/internal/store/activity"
+	"point/internal/store/assets"
+	"point/internal/store/point"
+	"point/internal/store/shared/db"
+	"point/internal/store/special"
 
 	"github.com/google/wire"
 )
@@ -15,6 +17,8 @@ var storeSet = wire.NewSet(
 	provideDatabase,
 	provideAssetsStore,
 	provideActivityStore,
+	provideActivitySpecialStore,
+	providePointDetailStore,
 )
 
 // provideDatabase is a Wire provider function that provides a
@@ -35,4 +39,18 @@ func provideAssetsStore(db *db.DB) core.UserAssetsStore {
 func provideActivityStore(db *db.DB) core.ActivityStore {
 	activity := activity.New(db)
 	return activity
+}
+
+// provideActivitySpecialStore is a Wire provider function that provides a
+// activity_special datastore
+func provideActivitySpecialStore(db *db.DB) core.ActivitySpecialStore {
+	special := special.New(db)
+	return special
+}
+
+// providePointDetailStore is a Wire provider function that provides a
+// user_point_detail datastore
+func providePointDetailStore(db *db.DB) core.UserPointDetailStore {
+	detail := point.New(db)
+	return detail
 }

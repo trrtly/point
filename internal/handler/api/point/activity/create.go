@@ -4,6 +4,7 @@ import (
 	"errors"
 	"point/internal/core"
 	"point/internal/handler/api/render"
+	"time"
 
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
@@ -34,6 +35,8 @@ type Create struct {
 // @Router /api/point/activity [post]
 func HandlerCreate(
 	activity core.ActivityStore,
+	special core.ActivitySpecialStore,
+	point core.UserPointDetailStore,
 ) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		req := new(Create)
@@ -45,6 +48,14 @@ func HandlerCreate(
 		if err := validate.Struct(req); err != nil {
 			return render.Fail(c, err)
 		}
+		logrus.WithFields(
+			logrus.Fields{
+				"uid":  req.UID,
+				"key":  req.Key,
+				"type": req.Type,
+				"val":  req.Val,
+			},
+		).Infoln("receive request")
 		activity, err := activity.FindEventKey(req.Key)
 		if err != nil {
 			logrus.WithFields(
@@ -61,9 +72,23 @@ func HandlerCreate(
 			return render.Fail(c, errors.New("事件尚未发布或不在有效期内"))
 		}
 		if activity.HasSpecial() {
-
+			special.FindSVal(activity.ID, req.Val)
+		} else {
+			if activity.ServicePoint > 0 || activity.MoneyPoint > 0 {
+				detail := &core.UserPointDetail{
+					UID:          req.UID,
+					ActivityID:   activity.ID,
+					MoneyPoint:   activity.MoneyPoint,
+					ServicePoint: activity.ServicePoint,
+					Type:         1,
+					Status:       1,
+					Desc:         "",
+					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				}
+				point.Create(detail)
+			}
 		}
 
-		return render.Success(c, activity)
+		return render.Success(c, "ok")
 	}
 }
