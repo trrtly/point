@@ -3,19 +3,18 @@ package core
 type (
 	// UserPointDetail defines user_money_point_detail table
 	UserPointDetail struct {
-		ID                int32   `json:"-"`
-		Yyid              string  `json:"yyid"`
-		UID               int64   `json:"-"`
-		ActivityID        int32   `json:"-"`
-		ActivitySpecialID int32   `json:"-"`
-		GoodsID           int32   `json:"-"`
-		GoodsNum          int32   `json:"-"`
-		MoneyPoint        float64 `json:"money_point"`
-		ServicePoint      float64 `json:"service_point"`
-		Type              int8    `json:"type"`
-		Status            int8    `json:"status"`
-		Desc              string  `json:"desc"`
-		CreatedAt         string  `json:"created_at"`
+		ID                int32  `json:"-"`
+		Yyid              string `json:"yyid"`
+		UID               int64  `json:"-"`
+		ActivityID        int32  `json:"-"`
+		ActivitySpecialID int32  `json:"-"`
+		GoodsID           int32  `json:"-"`
+		GoodsNum          int32  `json:"-"`
+		Type              int8   `json:"type"`
+		Status            int8   `json:"status"`
+		Desc              string `json:"desc"`
+		CreatedAt         string `json:"created_at"`
+		PointTrait
 	}
 
 	// UserPointDetailStore defines operations for working with user_money_point_detail.

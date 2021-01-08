@@ -65,30 +65,34 @@ func HandlerCreate(
 					"type": req.Type,
 					"val":  req.Val,
 				},
-			).Errorln("cannot find activity use the event_key")
+			).Errorln("cannot find activity use the key")
 			return render.Fail(c, err)
 		}
 		if !activity.IsActivite() {
 			return render.Fail(c, errors.New("事件尚未发布或不在有效期内"))
 		}
+		detail := &core.UserPointDetail{
+			UID:        req.UID,
+			ActivityID: activity.ID,
+			Type:       core.ActivityTypeGain,
+			Status:     core.StatusRegular,
+			CreatedAt:  time.Now().Format("2006-01-02 15:04:05"),
+		}
 		if activity.HasSpecial() {
-			special.FindSVal(activity.ID, req.Val)
-		} else {
-			if activity.ServicePoint > 0 || activity.MoneyPoint > 0 {
-				detail := &core.UserPointDetail{
-					UID:          req.UID,
-					ActivityID:   activity.ID,
-					MoneyPoint:   activity.MoneyPoint,
-					ServicePoint: activity.ServicePoint,
-					Type:         1,
-					Status:       1,
-					Desc:         "",
-					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
-				}
-				point.Create(detail)
+			aspecial, err := special.FindSVal(activity.ID, req.Val)
+			if err == nil && aspecial.IsActivite() && aspecial.IsPointGtZero() {
+				detail.MoneyPoint = aspecial.MoneyPoint
+				detail.ServicePoint = aspecial.ServicePoint
 			}
 		}
+		if activity.IsPointGtZero() {
+			detail.MoneyPoint = activity.MoneyPoint
+			detail.ServicePoint = activity.ServicePoint
+		}
+		if detail.IsPointGtZero() {
+			point.Create(detail)
+		}
 
-		return render.Success(c, "ok")
+		return render.Success(c, detail)
 	}
 }

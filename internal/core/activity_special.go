@@ -1,28 +1,18 @@
 package core
 
-import (
-	"time"
-)
-
 type (
 	// ActivitySpecial defines user_assets table
 	ActivitySpecial struct {
-		ID            int32     `json:"id"`
-		ActivityID    int32     `json:"activity_id"`
-		Name          string    `json:"name"`
-		SType         string    `json:"s_type"`
-		SValue        string    `json:"s_value"`
-		STableName    string    `json:"s_table_name"`
-		StartTime     time.Time `json:"start_time"`
-		EndTime       time.Time `json:"end_time"`
-		MoneyPoint    float64   `json:"money_point"`
-		ServicePoint  float64   `json:"service_point"`
-		NumPreDay     int32     `json:"num_pre_day"`
-		NumTotal      int32     `json:"num_total"`
-		CreatedUserID string    `json:"created_user_id"`
-		Status        int8      `json:"status"`
-		CreatedTime   string    `json:"-"`
-		ModifyTime    string    `json:"-"`
+		ID            int32  `json:"id"`
+		ActivityID    int32  `json:"activity_id"`
+		Name          string `json:"name"`
+		SType         string `json:"s_type"`
+		SValue        string `json:"s_value"`
+		STableName    string `json:"s_table_name"`
+		CreatedUserID string `json:"created_user_id"`
+		CreatedTime   string `json:"-"`
+		ModifyTime    string `json:"-"`
+		ActivityTrait
 	}
 
 	// ActivitySpecialStore defines operations for working with user_assets.
