@@ -20,7 +20,7 @@ import (
 // @contact.name wenlong
 // @contact.url http://yy-git.youyao99.com/youyao/point
 // @contact.email wenlong.chen@youyaomedtech.com
-// @host http://point/
+// @host http://point:8080/
 func main() {
 	var envfile string
 	flag.StringVar(&envfile, "env-file", ".env", "Read in a file of environment variables")
