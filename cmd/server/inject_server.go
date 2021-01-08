@@ -26,9 +26,9 @@ var serverSet = wire.NewSet(
 // router that is serves the provided handlers.
 func provideRouter(api api.Server) *fiber.App {
 	r := fiber.New()
-	r.Mount("/healthz", health.Handler())
-	r.Mount("/api", api.Handler())
-	r.Mount("/point-swagger", swagger.Handler())
+	health.Handler(r.Group("/healthz"))
+	api.Handler(r.Group("/api"))
+	swagger.Handler(r.Group("/point-swagger"))
 	return r
 }
 

@@ -8,8 +8,7 @@ import (
 )
 
 // Handler returns a new swagger handler.
-func Handler() *fiber.App {
-	r := fiber.New()
+func Handler(r fiber.Router) fiber.Router {
 	r.Get("/*", swagger.Handler)
 	return r
 }
