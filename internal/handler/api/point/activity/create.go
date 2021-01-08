@@ -44,10 +44,6 @@ func HandlerCreate(
 		if err := c.BodyParser(req); err != nil {
 			return render.Fail(c, err)
 		}
-		validate := validator.New()
-		if err := validate.Struct(req); err != nil {
-			return render.Fail(c, err)
-		}
 		logrus.WithFields(
 			logrus.Fields{
 				"uid":  req.UID,
@@ -56,6 +52,10 @@ func HandlerCreate(
 				"val":  req.Val,
 			},
 		).Infoln("receive request")
+		validate := validator.New()
+		if err := validate.Struct(req); err != nil {
+			return render.Fail(c, err)
+		}
 		activity, err := activity.FindEventKey(req.Key)
 		if err != nil {
 			logrus.WithFields(
