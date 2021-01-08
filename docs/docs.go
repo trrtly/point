@@ -188,7 +188,7 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
-	Host:        "http://point/",
+	Host:        "http://point:8080/",
 	BasePath:    "",
 	Schemes:     []string{},
 	Title:       "优药积分系统 api",

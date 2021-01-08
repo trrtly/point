@@ -15,7 +15,7 @@ require (
 	github.com/klauspost/compress v1.11.4 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.7.0
-	github.com/speps/go-hashids v2.0.0+incompatible // indirect
+	github.com/speps/go-hashids v2.0.0+incompatible
 	github.com/swaggo/swag v1.7.0
 	github.com/valyala/fasthttp v1.19.0 // indirect
 	golang.org/x/net v0.0.0-20201224014010-6772e930b67b // indirect

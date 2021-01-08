@@ -10,7 +10,7 @@
         },
         "version": "1.0"
     },
-    "host": "http://point/",
+    "host": "http://point:8080/",
     "paths": {
         "/api/point/activity": {
             "post": {
