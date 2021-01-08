@@ -4,8 +4,10 @@ import (
 	"point/internal/core"
 	"point/internal/handler/api/assets"
 	"point/internal/handler/api/point/activity"
+	"point/internal/handler/api/point/goods"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 type Server struct {
@@ -36,7 +38,9 @@ func New(
 // Handler defines api handler
 func (s Server) Handler() *fiber.App {
 	r := fiber.New()
+	r.Use(logger.New())
 	r.Get("/assets/:uid", assets.HandleFind(s.Users))
 	r.Post("/point/activity", activity.HandlerCreate(s.Activity, s.Special, s.Detail))
+	r.Post("/point/goods", goods.HandlerCreate())
 	return r
 }
