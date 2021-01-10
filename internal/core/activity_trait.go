@@ -13,6 +13,7 @@ type (
 		Status    int8      `json:"status"`
 		NumPreDay int32     `json:"num_pre_day"`
 		NumTotal  int32     `json:"num_total"`
+		PointDesc string    `json:"point_desc"`
 	}
 )
 

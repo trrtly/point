@@ -4,7 +4,6 @@
 *.out
 *.key
 .env
-.env.*
 release/
 scripts/*.go
 docker/**/data

@@ -83,11 +83,14 @@ func HandlerCreate(
 			if err == nil && aspecial.IsActivite() && aspecial.IsPointGtZero() {
 				detail.MoneyPoint = aspecial.MoneyPoint
 				detail.ServicePoint = aspecial.ServicePoint
+				detail.Desc = aspecial.PointDesc
+				detail.ActivitySpecialID = aspecial.ID
 			}
 		}
-		if activity.IsPointGtZero() {
+		if !detail.IsPointGtZero() && activity.IsPointGtZero() {
 			detail.MoneyPoint = activity.MoneyPoint
 			detail.ServicePoint = activity.ServicePoint
+			detail.Desc = activity.PointDesc
 		}
 		if detail.IsPointGtZero() {
 			point.Create(detail)
