@@ -10,7 +10,6 @@ import (
 func InitializeApplication(config config.Config) (application, error) {
 	wire.Build(
 		serverSet,
-		serviceSet,
 		storeSet,
 		newApplication,
 	)

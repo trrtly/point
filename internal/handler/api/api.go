@@ -11,8 +11,7 @@ import (
 )
 
 type Server struct {
-	Users    core.UserAssetsStore
-	Userz    core.UserAssetsService
+	Assets   core.UserAssetsStore
 	Activity core.ActivityStore
 	Special  core.ActivitySpecialStore
 	Detail   core.UserPointDetailStore
@@ -20,15 +19,13 @@ type Server struct {
 }
 
 func New(
-	users core.UserAssetsStore,
-	userz core.UserAssetsService,
+	assets core.UserAssetsStore,
 	activity core.ActivityStore,
 	special core.ActivitySpecialStore,
 	detail core.UserPointDetailStore,
 ) Server {
 	return Server{
-		Users:    users,
-		Userz:    userz,
+		Assets:   assets,
 		Activity: activity,
 		Special:  special,
 		Detail:   detail,
@@ -38,8 +35,8 @@ func New(
 // Handler defines api handler
 func (s Server) Handler(r fiber.Router) fiber.Router {
 	r.Use(logger.New())
-	r.Get("/assets/:uid", assets.HandleFind(s.Users))
-	r.Post("/point/activity", activity.HandlerCreate(s.Activity, s.Special, s.Detail))
+	r.Get("/assets/:uid", assets.HandleFind(s.Assets))
+	r.Post("/point/activity", activity.HandlerCreate(s.Activity, s.Special, s.Detail, s.Assets))
 	r.Post("/point/goods", goods.HandlerCreate())
 	return r
 }

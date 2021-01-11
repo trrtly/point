@@ -15,11 +15,8 @@ type (
 	UserAssetsStore interface {
 		// Find returns a user from the datastore.
 		Find(int64) (*UserAssets, error)
-	}
-	// UserAssetsService provides access to user account
-	UserAssetsService interface {
-		// Find returns the authenticated user.
-		Find(access, refresh string) (*UserAssets, error)
+		// IncrPoint increment a user's money or service point or both
+		IncrPoint(int64, float64, float64) error
 	}
 )
 

@@ -8,7 +8,6 @@ package main
 import (
 	"point/cmd/server/config"
 	"point/internal/handler/api"
-	"point/internal/service/user"
 )
 
 // Injectors from wire.go:
@@ -19,11 +18,10 @@ func InitializeApplication(config2 config.Config) (application, error) {
 		return application{}, err
 	}
 	userAssetsStore := provideAssetsStore(db)
-	userAssetsService := user.New(userAssetsStore)
 	activityStore := provideActivityStore(db)
 	activitySpecialStore := provideActivitySpecialStore(db)
 	userPointDetailStore := providePointDetailStore(db)
-	server := api.New(userAssetsStore, userAssetsService, activityStore, activitySpecialStore, userPointDetailStore)
+	server := api.New(userAssetsStore, activityStore, activitySpecialStore, userPointDetailStore)
 	app := provideRouter(server)
 	serverServer := provideServer(app, config2)
 	mainApplication := newApplication(serverServer, userAssetsStore)

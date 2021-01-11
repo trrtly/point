@@ -37,6 +37,7 @@ func HandlerCreate(
 	activity core.ActivityStore,
 	special core.ActivitySpecialStore,
 	point core.UserPointDetailStore,
+	assets core.UserAssetsStore,
 ) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		req := new(Create)
@@ -93,6 +94,7 @@ func HandlerCreate(
 			detail.Desc = activity.PointDesc
 		}
 		if detail.IsPointGtZero() {
+			assets.IncrPoint(detail.UID, detail.MoneyPoint, detail.ServicePoint)
 			point.Create(detail)
 		}
 

@@ -51,7 +51,7 @@ func setupDatabase(cfg *Config) (*gorm.DB, error) {
 // updateTimeStampForCreateCallback will set `CreatedAt`, `UpdatedAt` when creating
 func updateTimeStampForCreateCallback(scope *gorm.Scope) {
 	if !scope.HasError() {
-		nowTime := uint(time.Now().Unix())
+		nowTime := time.Now().Format("2006-01-02 15:04:05")
 		if createdAtField, ok := scope.FieldByName("CreatedAt"); ok {
 			if createdAtField.IsBlank {
 				createdAtField.Set(nowTime)
@@ -69,6 +69,6 @@ func updateTimeStampForCreateCallback(scope *gorm.Scope) {
 // updateTimeStampForUpdateCallback will set `UpdatedAt` when updating
 func updateTimeStampForUpdateCallback(scope *gorm.Scope) {
 	if _, ok := scope.Get("gorm:update_column"); !ok {
-		scope.SetColumn("UpdatedAt", uint(time.Now().Unix()))
+		scope.SetColumn("UpdatedAt", time.Now().Format("2006-01-02 15:04:05"))
 	}
 }
