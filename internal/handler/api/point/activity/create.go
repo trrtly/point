@@ -3,6 +3,7 @@ package activity
 import (
 	"errors"
 	"point/internal/core"
+	"point/internal/core/status"
 	"point/internal/handler/api/render"
 	"time"
 
@@ -76,7 +77,7 @@ func HandlerCreate(
 			UID:        req.UID,
 			ActivityID: activity.ID,
 			Type:       core.ActivityTypeGain,
-			Status:     core.StatusRegular,
+			Status:     status.Regular,
 			CreatedAt:  time.Now().Format("2006-01-02 15:04:05"),
 		}
 		if activity.HasSpecial() {

@@ -1,5 +1,10 @@
 package core
 
+import (
+	"point/internal/core/status"
+	"point/internal/core/trait"
+)
+
 type (
 	// Activity defines user_assets table
 	Activity struct {
@@ -11,7 +16,7 @@ type (
 		CreatedUserID string `json:"created_user_id"`
 		CreatedTime   string `json:"-"`
 		ModifyTime    string `json:"-"`
-		ActivityTrait
+		trait.Activity
 	}
 
 	// ActivityStore defines operations for working with user_assets.
@@ -35,5 +40,5 @@ func (Activity) TableName() string {
 
 // HasSpecial defines the activity has special
 func (a *Activity) HasSpecial() bool {
-	return a.ExistSpecial == StatusRegular
+	return a.ExistSpecial == status.Regular
 }

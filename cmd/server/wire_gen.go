@@ -21,9 +21,15 @@ func InitializeApplication(config2 config.Config) (application, error) {
 	activityStore := provideActivityStore(db)
 	activitySpecialStore := provideActivitySpecialStore(db)
 	userPointDetailStore := providePointDetailStore(db)
-	server := api.New(userAssetsStore, activityStore, activitySpecialStore, userPointDetailStore)
+	exchangeGoodsStore := provideExchangeGoodsStore(db)
+	hd, err := provideHashids(config2)
+	if err != nil {
+		return application{}, err
+	}
+	exchangeGoodsOrderStore := provideExchangeGoodsOrderStore(db)
+	server := api.New(userAssetsStore, activityStore, activitySpecialStore, userPointDetailStore, exchangeGoodsStore, hd, exchangeGoodsOrderStore)
 	app := provideRouter(server)
 	serverServer := provideServer(app, config2)
-	mainApplication := newApplication(serverServer, userAssetsStore)
+	mainApplication := newApplication(serverServer, userAssetsStore, hd)
 	return mainApplication, nil
 }

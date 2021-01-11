@@ -1,6 +1,7 @@
 package config
 
 import (
+	"point/internal/pkg/hashids"
 	"point/internal/store/shared/db"
 
 	"github.com/kelseyhightower/envconfig"
@@ -13,6 +14,7 @@ type (
 		Server   Server
 		Logging  Logging
 		Database db.Config
+		Hashids  hashids.Config
 	}
 
 	// Server provides the server configuration.

@@ -1,5 +1,7 @@
 package core
 
+import "point/internal/core/trait"
+
 type (
 	// UserPointDetail defines user_money_point_detail table
 	UserPointDetail struct {
@@ -14,7 +16,7 @@ type (
 		Status            int8   `json:"status"`
 		Desc              string `json:"desc"`
 		CreatedAt         string `json:"created_at"`
-		PointTrait
+		trait.Point
 	}
 
 	// UserPointDetailStore defines operations for working with user_money_point_detail.

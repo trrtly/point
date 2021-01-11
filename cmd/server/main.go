@@ -7,6 +7,7 @@ import (
 	"point/cmd/server/config"
 
 	"point/internal/core"
+	"point/internal/pkg/hashids"
 	"point/internal/server"
 
 	"github.com/joho/godotenv"
@@ -86,17 +87,20 @@ func initLogging(c config.Config) {
 
 // application is the main struct for the point server.
 type application struct {
-	server *server.Server
-	assets core.UserAssetsStore
+	server  *server.Server
+	assets  core.UserAssetsStore
+	hashids *hashids.HD
 }
 
 // newApplication creates a new application struct.
 func newApplication(
 	server *server.Server,
 	assets core.UserAssetsStore,
+	hashids *hashids.HD,
 ) application {
 	return application{
-		assets: assets,
-		server: server,
+		assets:  assets,
+		server:  server,
+		hashids: hashids,
 	}
 }

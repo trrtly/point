@@ -33,3 +33,12 @@ func (s *assetsStore) IncrPoint(uid int64, moneyPoint float64, servicePoint floa
 	}
 	return s.db.Where("uid = ?", uid).Updates(upd).Error
 }
+
+// DecrPoint decrement a user's money or service point or both
+func (s *assetsStore) DecrPoint(uid int64, moneyPoint float64, servicePoint float64) error {
+	upd := map[string]interface{}{
+		"money_point":   gorm.Expr("money_point - ?", moneyPoint),
+		"service_point": gorm.Expr("service_point - ?", servicePoint),
+	}
+	return s.db.Where("uid = ?", uid).Updates(upd).Error
+}

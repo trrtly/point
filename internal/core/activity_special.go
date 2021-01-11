@@ -1,5 +1,7 @@
 package core
 
+import "point/internal/core/trait"
+
 type (
 	// ActivitySpecial defines user_assets table
 	ActivitySpecial struct {
@@ -12,7 +14,7 @@ type (
 		CreatedUserID string `json:"created_user_id"`
 		CreatedTime   string `json:"-"`
 		ModifyTime    string `json:"-"`
-		ActivityTrait
+		trait.Activity
 	}
 
 	// ActivitySpecialStore defines operations for working with user_assets.
@@ -22,7 +24,7 @@ type (
 	}
 )
 
-// TableName defines the activity table name in db
+// TableName defines the table name
 func (ActivitySpecial) TableName() string {
 	return "t_activity_special"
 }
