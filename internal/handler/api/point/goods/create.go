@@ -3,6 +3,7 @@ package goods
 import (
 	"errors"
 	"point/internal/core"
+	"point/internal/core/status"
 	"point/internal/handler/api/render"
 	"point/internal/pkg/hashids"
 
@@ -39,6 +40,12 @@ func HandlerCreate(
 	return func(c *fiber.Ctx) error {
 		req := new(Create)
 
+		logrus.WithFields(
+			logrus.Fields{
+				"data": string(c.Body()),
+			},
+		).Errorln("/api/point/goods request data")
+
 		if err := c.BodyParser(req); err != nil {
 			return render.Fail(c, err)
 		}
@@ -71,6 +78,7 @@ func HandlerCreate(
 			UID:      req.UID,
 			GoodsID:  egoods.ID,
 			GoodsNum: req.GoodsNum,
+			Status:   status.Regular,
 		}
 		gorder.MoneyPoint = egoods.MoneyPoint * float64(req.GoodsNum)
 		gorder.ServicePoint = egoods.ServicePoint * float64(req.GoodsNum)
