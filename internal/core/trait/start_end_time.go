@@ -8,9 +8,9 @@ import (
 type (
 	// StartEndTime defines a StartEndTime is alife
 	StartEndTime struct {
-		StartTime time.Time `json:"start_time"`
-		EndTime   time.Time `json:"end_time"`
-		Status    int8      `json:"status"`
+		StartTime time.Time `json:"-"`
+		EndTime   time.Time `json:"-"`
+		Status    int8      `json:"-"`
 	}
 )
 

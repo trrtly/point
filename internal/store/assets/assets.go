@@ -4,7 +4,7 @@ import (
 	"point/internal/core"
 	"point/internal/store/shared/db"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // New returns a new UserStore.

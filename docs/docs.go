@@ -69,6 +69,54 @@ var doc = `{
             }
         },
         "/api/point/goods": {
+            "get": {
+                "description": "积分兑换商品列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "兑换商品"
+                ],
+                "summary": "积分兑换商品列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "uid",
+                        "name": "uid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "当前页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页显示条数",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回值",
+                        "schema": {
+                            "$ref": "#/definitions/render.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "失败返回值",
+                        "schema": {
+                            "$ref": "#/definitions/render.Response"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "积分兑换商品",
                 "consumes": [
@@ -188,7 +236,7 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
-	Host:        "http://point:8080/",
+	Host:        "http://point:8080",
 	BasePath:    "",
 	Schemes:     []string{},
 	Title:       "优药积分系统 api",

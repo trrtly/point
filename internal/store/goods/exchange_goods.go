@@ -17,15 +17,21 @@ type goodsStore struct {
 }
 
 // ListActivate returns a activate exchange goods list from the db.
-func (s *goodsStore) ListActivate() ([]*core.ExchangeGoods, error) {
+func (s *goodsStore) ListActivate(page, pageSize int) ([]*core.ExchangeGoods, int64, error) {
 	var out []*core.ExchangeGoods
+	var count int64
 	now := time.Now().Format("2006-01-02 15:04:05")
-	err := s.db.Select("*").
-		Where("start_time >= ?", now).
-		Where("end_time < ?", now).
-		Where("status = ?", status.Regular).
-		Find(out).Error
-	return out, err
+	sdb := s.db.Where("start_time <= ?", now).
+		Where("end_time > ?", now).
+		Where("status = ?", status.Regular)
+
+	err := sdb.Scopes(db.Paginate(page, pageSize)).Find(&out).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	err = sdb.Count(&count).Error
+
+	return out, count, err
 }
 
 // Find returns a goods by id from the db.

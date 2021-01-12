@@ -14,6 +14,8 @@ type Config struct {
 	Salt string `envconfig:"POINT_HD_SALT"`
 }
 
+var DefaultHd *HD
+
 // HD defines a hashids
 type HD struct {
 	*hashids.HashID

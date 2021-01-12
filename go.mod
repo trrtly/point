@@ -9,7 +9,6 @@ require (
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/gofiber/fiber/v2 v2.3.2
 	github.com/google/wire v0.4.0
-	github.com/jinzhu/gorm v1.9.16
 	github.com/joho/godotenv v1.3.0
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/klauspost/compress v1.11.4 // indirect
@@ -24,4 +23,6 @@ require (
 	golang.org/x/tools v0.0.0-20210105210202-9ed45478a130 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0
+	gorm.io/driver/mysql v1.0.3
+	gorm.io/gorm v1.20.11
 )

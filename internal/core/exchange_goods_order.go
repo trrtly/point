@@ -7,7 +7,7 @@ type (
 	ExchangeGoodsOrder struct {
 		ID        uint32 `json:"id"`
 		UID       int64  `json:"uid"`
-		GoodsID   uint32 `json:"goods_id"`
+		GoodsID   int64  `json:"goods_id"`
 		GoodsNum  uint32 `json:"goods_num"`
 		Status    int8   `json:"status"`
 		CreatedAt string `json:"created_at"`

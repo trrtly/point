@@ -44,8 +44,9 @@ func New(
 // Handler defines api handler
 func (s Server) Handler(r fiber.Router) fiber.Router {
 	r.Use(logger.New())
-	r.Get("/assets/:uid", assets.HandleFind(s.Assets))
+	r.Get("/assets", assets.HandleFind(s.Assets))
 	r.Post("/point/activity", activity.HandlerCreate(s.Activity, s.Special, s.Detail, s.Assets))
 	r.Post("/point/goods", goods.HandlerCreate(s.HD, s.Goods, s.GoodsOrder, s.Assets))
+	r.Get("/point/goods", goods.HandlerList(s.HD, s.Goods, s.GoodsOrder, s.Assets))
 	return r
 }
