@@ -47,6 +47,7 @@ func HandlerList(
 		if err != nil {
 			return render.Fail(c, err)
 		}
+
 		res := map[string]interface{}{
 			"list":      goods,
 			"page":      req.Page,

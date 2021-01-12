@@ -1,12 +1,14 @@
 package core
 
-import "point/internal/core/trait"
+import (
+	"point/internal/core/trait"
+)
 
 type (
 	// UserPointDetail defines user_money_point_detail table
 	UserPointDetail struct {
-		ID                int32  `json:"-"`
-		Yyid              string `json:"yyid"`
+		trait.IDYyid
+		Yyid              string `json:"detail_yyid"`
 		UID               int64  `json:"-"`
 		ActivityID        int32  `json:"-"`
 		ActivitySpecialID int32  `json:"-"`
@@ -22,14 +24,9 @@ type (
 	// UserPointDetailStore defines operations for working with user_money_point_detail.
 	UserPointDetailStore interface {
 		// Find returns a user_money_point_detail from the db.
-		List(int64) (*UserPointDetail, error)
+		List(int64) ([]*UserPointDetail, int64, error)
 		// Create persists a new UserPointDetail in the db.
 		Create(*UserPointDetail) error
-	}
-	// UserPointDetailService provides access to user account
-	UserPointDetailService interface {
-		// Find returns the authenticated user.
-		Find(access, refresh string) (*UserPointDetail, error)
 	}
 )
 

@@ -17,12 +17,16 @@ type moneyStore struct {
 }
 
 // List returns a user assets from the datastore.
-func (s *moneyStore) List(uid int64) (*core.UserPointDetail, error) {
-	out := &core.UserPointDetail{}
-	err := s.db.Select("*").
-		Where("uid = ?", uid).
-		Find(out).Error
-	return out, err
+func (s *moneyStore) List(uid int64) ([]*core.UserPointDetail, int64, error) {
+	var out []*core.UserPointDetail
+	var count int64
+	sdb := s.db.Select("*").Where("uid = ?", uid)
+	err := sdb.Find(&out).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	err = sdb.Count(&count).Error
+	return out, 0, err
 }
 
 // Create persists a new UserPointDetail in the db.
