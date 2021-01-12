@@ -1,4 +1,4 @@
-package goods
+package detail
 
 import (
 	"point/internal/core"
@@ -12,35 +12,21 @@ import (
 type List struct {
 	UID      int64 `query:"uid,required,number"`
 	Page     int   `query:"page,number"`
-	PageSize int   `query:"page_size,number"`
+	PageSize int   `query:"pageSize,number"`
 }
 
-type response struct {
-	render.Response
-	Data struct {
-		// 商品列表
-		List []*core.ExchangeGoods `json:"list"`
-		// 页码值
-		Page int `json:"page" example:"1"`
-		// 每页显示条数
-		PageSize int `json:"page_size" example:"20"`
-		// 总条数
-		Total int64 `json:"total" example:"100"`
-	} `json:"data"`
-}
-
-// @Summary 积分兑换商品列表
-// @Description 积分兑换商品列表
-// @Tags 兑换商品
+// @Summary 获取积分明细列表
+// @Description 获取积分明细列表
+// @Tags 积分明细列表
 // @Version 1.0
 // @Accept json
 // @Produce json
 // @Param uid query int true "uid"
 // @Param page query int false "当前页码"
 // @Param page_size query int false "每页显示条数"
-// @Success 200 object response "成功返回值"
+// @Success 200 object render.Response "成功返回值"
 // @Failure 400 object render.Response "失败返回值"
-// @Router /api/point/goods [get]
+// @Router /api/points [get]
 func HandlerList(
 	hd *hashids.HD,
 	goods core.ExchangeGoodsStore,
@@ -72,3 +58,4 @@ func HandlerList(
 		return render.Success(c, res)
 	}
 }
+

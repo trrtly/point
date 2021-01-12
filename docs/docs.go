@@ -98,7 +98,7 @@ var doc = `{
                     {
                         "type": "integer",
                         "description": "每页显示条数",
-                        "name": "pageSize",
+                        "name": "page_size",
                         "in": "query"
                     }
                 ],
@@ -106,7 +106,7 @@ var doc = `{
                     "200": {
                         "description": "成功返回值",
                         "schema": {
-                            "$ref": "#/definitions/render.Response"
+                            "$ref": "#/definitions/goods.response"
                         }
                     },
                     "400": {
@@ -155,6 +155,56 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/api/points": {
+            "get": {
+                "description": "获取积分明细列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "积分明细列表"
+                ],
+                "summary": "获取积分明细列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "uid",
+                        "name": "uid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "当前页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页显示条数",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回值",
+                        "schema": {
+                            "$ref": "#/definitions/render.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "失败返回值",
+                        "schema": {
+                            "$ref": "#/definitions/render.Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -183,6 +233,44 @@ var doc = `{
                 }
             }
         },
+        "core.ExchangeGoods": {
+            "type": "object",
+            "properties": {
+                "desc": {
+                    "description": "商品描述",
+                    "type": "string",
+                    "example": "每100的服务积分和100个消费积分可兑换100块钱"
+                },
+                "goods_name": {
+                    "description": "商品名称",
+                    "type": "string",
+                    "example": "兑换现金100"
+                },
+                "goods_pic": {
+                    "description": "商品图片",
+                    "type": "string",
+                    "example": "http://coupons.quanduogo.com/ico.png"
+                },
+                "goods_type": {
+                    "description": "商品类型 1表示 现金 2表示实物  3表示虚拟",
+                    "type": "integer",
+                    "example": 1
+                },
+                "money_point": {
+                    "description": "消费积分",
+                    "type": "number",
+                    "example": 100
+                },
+                "service_point": {
+                    "description": "服务积分",
+                    "type": "number",
+                    "example": 100
+                },
+                "yyid": {
+                    "type": "string"
+                }
+            }
+        },
         "goods.Create": {
             "type": "object",
             "required": [
@@ -205,12 +293,54 @@ var doc = `{
                 }
             }
         },
+        "goods.response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "` + "`" + `code` + "`" + ` 错误码\n全局错误码说明：\n` + "`" + `1001` + "`" + ` 用户不存在",
+                    "type": "integer",
+                    "example": 200
+                },
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "list": {
+                            "description": "商品列表",
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/core.ExchangeGoods"
+                            }
+                        },
+                        "page": {
+                            "description": "页码值",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "page_size": {
+                            "description": "每页显示条数",
+                            "type": "integer",
+                            "example": 20
+                        },
+                        "total": {
+                            "description": "总条数",
+                            "type": "integer",
+                            "example": 100
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "` + "`" + `msg` + "`" + ` 错误信息",
+                    "type": "string"
+                }
+            }
+        },
         "render.Response": {
             "type": "object",
             "properties": {
                 "code": {
                     "description": "` + "`" + `code` + "`" + ` 错误码\n全局错误码说明：\n` + "`" + `1001` + "`" + ` 用户不存在",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 200
                 },
                 "data": {
                     "type": "object"

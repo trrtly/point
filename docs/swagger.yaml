@@ -19,6 +19,35 @@ definitions:
     - key
     - uid
     type: object
+  core.ExchangeGoods:
+    properties:
+      desc:
+        description: 商品描述
+        example: 每100的服务积分和100个消费积分可兑换100块钱
+        type: string
+      goods_name:
+        description: 商品名称
+        example: 兑换现金100
+        type: string
+      goods_pic:
+        description: 商品图片
+        example: http://coupons.quanduogo.com/ico.png
+        type: string
+      goods_type:
+        description: 商品类型 1表示 现金 2表示实物  3表示虚拟
+        example: 1
+        type: integer
+      money_point:
+        description: 消费积分
+        example: 100
+        type: number
+      service_point:
+        description: 服务积分
+        example: 100
+        type: number
+      yyid:
+        type: string
+    type: object
   goods.Create:
     properties:
       goodsNum:
@@ -35,6 +64,39 @@ definitions:
     - goodsYyid
     - uid
     type: object
+  goods.response:
+    properties:
+      code:
+        description: |-
+          `code` 错误码
+          全局错误码说明：
+          `1001` 用户不存在
+        example: 200
+        type: integer
+      data:
+        properties:
+          list:
+            description: 商品列表
+            items:
+              $ref: '#/definitions/core.ExchangeGoods'
+            type: array
+          page:
+            description: 页码值
+            example: 1
+            type: integer
+          page_size:
+            description: 每页显示条数
+            example: 20
+            type: integer
+          total:
+            description: 总条数
+            example: 100
+            type: integer
+        type: object
+      msg:
+        description: '`msg` 错误信息'
+        type: string
+    type: object
   render.Response:
     properties:
       code:
@@ -42,6 +104,7 @@ definitions:
           `code` 错误码
           全局错误码说明：
           `1001` 用户不存在
+        example: 200
         type: integer
       data:
         type: object
@@ -102,7 +165,7 @@ paths:
         type: integer
       - description: 每页显示条数
         in: query
-        name: pageSize
+        name: page_size
         type: integer
       produces:
       - application/json
@@ -110,7 +173,7 @@ paths:
         "200":
           description: 成功返回值
           schema:
-            $ref: '#/definitions/render.Response'
+            $ref: '#/definitions/goods.response'
         "400":
           description: 失败返回值
           schema:
@@ -143,4 +206,37 @@ paths:
       summary: 积分兑换商品
       tags:
       - 兑换商品
+  /api/points:
+    get:
+      consumes:
+      - application/json
+      description: 获取积分明细列表
+      parameters:
+      - description: uid
+        in: query
+        name: uid
+        required: true
+        type: integer
+      - description: 当前页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页显示条数
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+        "400":
+          description: 失败返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+      summary: 获取积分明细列表
+      tags:
+      - 积分明细列表
 swagger: "2.0"

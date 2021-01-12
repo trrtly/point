@@ -8,7 +8,7 @@ import (
 
 type IDYyid struct {
 	ID   int64  `json:"-"`
-	Yyid string `json:"-"`
+	Yyid string `json:"yyid"`
 }
 
 // AfterFind 查询后钩子
