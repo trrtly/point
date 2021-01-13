@@ -5,7 +5,6 @@ import (
 	"point/internal/core"
 	"point/internal/core/status"
 	"point/internal/handler/api/render"
-	"time"
 
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
@@ -76,9 +75,8 @@ func HandlerCreate(
 		detail := &core.UserPointDetail{
 			UID:        req.UID,
 			ActivityID: activity.ID,
-			Type:       core.ActivityTypeGain,
+			UseType:    core.ActivityTypeGain,
 			Status:     status.Regular,
-			CreatedAt:  time.Now().Format("2006-01-02 15:04:05"),
 		}
 		if activity.HasSpecial() {
 			aspecial, err := special.FindSVal(activity.ID, req.Val)

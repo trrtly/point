@@ -17,16 +17,16 @@ type moneyStore struct {
 }
 
 // List returns a user assets from the datastore.
-func (s *moneyStore) List(uid int64) ([]*core.UserPointDetail, int64, error) {
+func (s *moneyStore) List(uid int64, ptype int8, page, pageSize int) ([]*core.UserPointDetail, int64, error) {
 	var out []*core.UserPointDetail
 	var count int64
-	sdb := s.db.Select("*").Where("uid = ?", uid)
-	err := sdb.Find(&out).Error
+	sdb := s.db.Where("uid = ?", uid).Where("point_type", ptype)
+	err := sdb.Scopes(db.Paginate(page, pageSize)).Find(&out).Error
 	if err != nil {
 		return nil, 0, err
 	}
 	err = sdb.Count(&count).Error
-	return out, 0, err
+	return out, count, err
 }
 
 // Create persists a new UserPointDetail in the db.
@@ -35,17 +35,7 @@ func (s *moneyStore) Create(m *core.UserPointDetail) error {
 	if res.Error != nil {
 		logrus.WithFields(
 			logrus.Fields{
-				"id":            m.ID,
-				"uid":           m.UID,
-				"activity_id":   m.ActivityID,
-				"goods_id":      m.GoodsID,
-				"goods_num":     m.GoodsNum,
-				"service_point": m.ServicePoint,
-				"money_point":   m.MoneyPoint,
-				"type":          m.Type,
-				"status":        m.Status,
-				"desc":          m.Desc,
-				"created_at":    m.CreatedAt,
+				"data": m,
 			},
 		).Errorln("create UserPointDetail fail")
 	}

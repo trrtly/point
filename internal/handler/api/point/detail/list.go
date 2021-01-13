@@ -3,7 +3,6 @@ package detail
 import (
 	"point/internal/core"
 	"point/internal/handler/api/render"
-	"point/internal/pkg/hashids"
 
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
@@ -11,8 +10,12 @@ import (
 
 type List struct {
 	UID      int64 `query:"uid,required,number"`
+	PType    int8  `query:"ptype,number"`
 	Page     int   `query:"page,number"`
 	PageSize int   `query:"pageSize,number"`
+}
+
+type response struct {
 }
 
 // @Summary 获取积分明细列表
@@ -22,16 +25,14 @@ type List struct {
 // @Accept json
 // @Produce json
 // @Param uid query int true "uid"
+// @Param ptype query int true "积分类型 1：消费积分，2：服务积分"
 // @Param page query int false "当前页码"
 // @Param page_size query int false "每页显示条数"
 // @Success 200 object render.Response "成功返回值"
 // @Failure 400 object render.Response "失败返回值"
 // @Router /api/points [get]
 func HandlerList(
-	hd *hashids.HD,
-	goods core.ExchangeGoodsStore,
-	gorders core.ExchangeGoodsOrderStore,
-	assets core.UserAssetsStore,
+	detail core.UserPointDetailStore,
 ) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		req := new(List)
@@ -43,13 +44,13 @@ func HandlerList(
 		if err := validate.Struct(req); err != nil {
 			return render.Fail(c, err)
 		}
-		goods, total, err := goods.ListActivate(req.Page, req.PageSize)
+		details, total, err := detail.List(req.UID, req.PType, req.Page, req.PageSize)
 		if err != nil {
 			return render.Fail(c, err)
 		}
 
 		res := map[string]interface{}{
-			"list":      goods,
+			"list":      details,
 			"page":      req.Page,
 			"page_size": req.PageSize,
 			"total":     total,
@@ -58,4 +59,3 @@ func HandlerList(
 		return render.Success(c, res)
 	}
 }
-

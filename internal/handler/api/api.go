@@ -5,6 +5,7 @@ import (
 	"point/internal/handler/api/assets"
 	"point/internal/handler/api/point/activity"
 	"point/internal/handler/api/point/goods"
+	"point/internal/handler/api/point/detail"
 	"point/internal/pkg/hashids"
 
 	"github.com/gofiber/fiber/v2"
@@ -48,5 +49,6 @@ func (s Server) Handler(r fiber.Router) fiber.Router {
 	r.Post("/point/activity", activity.HandlerCreate(s.Activity, s.Special, s.Detail, s.Assets))
 	r.Post("/point/goods", goods.HandlerCreate(s.HD, s.Goods, s.GoodsOrder, s.Assets))
 	r.Get("/point/goods", goods.HandlerList(s.HD, s.Goods, s.GoodsOrder, s.Assets))
+	r.Get("/point/details", detail.HandlerList(s.Detail))
 	return r
 }

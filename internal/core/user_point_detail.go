@@ -2,29 +2,31 @@ package core
 
 import (
 	"point/internal/core/trait"
+
+	"gorm.io/gorm"
 )
 
 type (
 	// UserPointDetail defines user_money_point_detail table
 	UserPointDetail struct {
 		trait.IDYyid
-		Yyid              string `json:"detail_yyid"`
 		UID               int64  `json:"-"`
 		ActivityID        int32  `json:"-"`
 		ActivitySpecialID int32  `json:"-"`
 		GoodsID           int32  `json:"-"`
 		GoodsNum          int32  `json:"-"`
-		Type              int8   `json:"type"`
+		PointType         int8   `json:"point_type"`
+		UseType           int8   `json:"use_type"`
 		Status            int8   `json:"status"`
 		Desc              string `json:"desc"`
-		CreatedAt         string `json:"created_at"`
+		trait.CreatedUpdatedTime
 		trait.Point
 	}
 
 	// UserPointDetailStore defines operations for working with user_money_point_detail.
 	UserPointDetailStore interface {
 		// Find returns a user_money_point_detail from the db.
-		List(int64) ([]*UserPointDetail, int64, error)
+		List(int64, int8, int, int) ([]*UserPointDetail, int64, error)
 		// Create persists a new UserPointDetail in the db.
 		Create(*UserPointDetail) error
 	}
@@ -33,4 +35,11 @@ type (
 // TableName defines the user_money_point_detail table name in db
 func (UserPointDetail) TableName() string {
 	return "t_user_point_detail"
+}
+
+// AfterFind 查询后钩子
+func (s *UserPointDetail) AfterFind(tx *gorm.DB) (err error) {
+	err = s.IDYyid.AfterFind(tx)
+	s.FormatTime()
+	return
 }

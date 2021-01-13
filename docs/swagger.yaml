@@ -217,6 +217,11 @@ paths:
         name: uid
         required: true
         type: integer
+      - description: 积分类型 1：消费积分，2：服务积分
+        in: query
+        name: ptype
+        required: true
+        type: integer
       - description: 当前页码
         in: query
         name: page

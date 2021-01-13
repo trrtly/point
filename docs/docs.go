@@ -179,6 +179,13 @@ var doc = `{
                     },
                     {
                         "type": "integer",
+                        "description": "积分类型 1：消费积分，2：服务积分",
+                        "name": "ptype",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
                         "description": "当前页码",
                         "name": "page",
                         "in": "query"
