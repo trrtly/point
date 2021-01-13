@@ -8,8 +8,9 @@ import (
 )
 
 // New returns a new UserStore.
-func New(db *db.DB) core.UserAssetsStore {
-	return &assetsStore{db}
+func New(d *db.DB) core.UserAssetsStore {
+	m := d.Model(&core.UserAssets{})
+	return &assetsStore{&db.DB{DB: m}}
 }
 
 type assetsStore struct {

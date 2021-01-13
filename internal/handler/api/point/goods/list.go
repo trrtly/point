@@ -3,7 +3,6 @@ package goods
 import (
 	"point/internal/core"
 	"point/internal/handler/api/render"
-	"point/internal/pkg/hashids"
 
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
@@ -42,7 +41,6 @@ type response struct {
 // @Failure 400 object render.Response "失败返回值"
 // @Router /api/point/goods [get]
 func HandlerList(
-	hd *hashids.HD,
 	goods core.ExchangeGoodsStore,
 	gorders core.ExchangeGoodsOrderStore,
 	assets core.UserAssetsStore,

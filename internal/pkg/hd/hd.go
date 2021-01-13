@@ -1,4 +1,4 @@
-package hashids
+package hd
 
 import "github.com/speps/go-hashids"
 

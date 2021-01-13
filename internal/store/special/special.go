@@ -6,8 +6,9 @@ import (
 )
 
 // New returns a new ActivitySpecialStore.
-func New(db *db.DB) core.ActivitySpecialStore {
-	return &specialStore{db}
+func New(d *db.DB) core.ActivitySpecialStore {
+	m := d.Model(&core.ActivitySpecial{})
+	return &specialStore{&db.DB{DB: m}}
 }
 
 type specialStore struct {

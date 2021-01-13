@@ -1,8 +1,8 @@
 package config
 
 import (
-	"point/internal/pkg/hashids"
 	"point/internal/store/shared/db"
+	"point/internal/pkg/hd"
 
 	"github.com/kelseyhightower/envconfig"
 	"gopkg.in/yaml.v2"
@@ -14,7 +14,7 @@ type (
 		Server   Server
 		Logging  Logging
 		Database db.Config
-		Hashids  hashids.Config
+		Hashids  hd.Config
 	}
 
 	// Server provides the server configuration.

@@ -4,9 +4,9 @@ import (
 	"point/internal/core"
 	"point/internal/handler/api/assets"
 	"point/internal/handler/api/point/activity"
-	"point/internal/handler/api/point/goods"
 	"point/internal/handler/api/point/detail"
-	"point/internal/pkg/hashids"
+	"point/internal/handler/api/point/goods"
+	"point/internal/pkg/hd"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -17,7 +17,7 @@ type Server struct {
 	Activity   core.ActivityStore
 	Special    core.ActivitySpecialStore
 	Detail     core.UserPointDetailStore
-	HD         *hashids.HD
+	HD         *hd.HD
 	Goods      core.ExchangeGoodsStore
 	GoodsOrder core.ExchangeGoodsOrderStore
 }
@@ -28,7 +28,7 @@ func New(
 	special core.ActivitySpecialStore,
 	detail core.UserPointDetailStore,
 	goods core.ExchangeGoodsStore,
-	hd *hashids.HD,
+	hashid *hd.HD,
 	goodsOrder core.ExchangeGoodsOrderStore,
 ) Server {
 	return Server{
@@ -36,7 +36,7 @@ func New(
 		Activity:   activity,
 		Special:    special,
 		Detail:     detail,
-		HD:         hd,
+		HD:         hashid,
 		Goods:      goods,
 		GoodsOrder: goodsOrder,
 	}
@@ -48,7 +48,7 @@ func (s Server) Handler(r fiber.Router) fiber.Router {
 	r.Get("/assets", assets.HandleFind(s.Assets))
 	r.Post("/point/activity", activity.HandlerCreate(s.Activity, s.Special, s.Detail, s.Assets))
 	r.Post("/point/goods", goods.HandlerCreate(s.HD, s.Goods, s.GoodsOrder, s.Assets))
-	r.Get("/point/goods", goods.HandlerList(s.HD, s.Goods, s.GoodsOrder, s.Assets))
+	r.Get("/point/goods", goods.HandlerList(s.Goods, s.GoodsOrder, s.Assets))
 	r.Get("/point/details", detail.HandlerList(s.Detail))
 	return r
 }

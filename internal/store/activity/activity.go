@@ -6,8 +6,9 @@ import (
 )
 
 // New returns a new UserStore.
-func New(db *db.DB) core.ActivityStore {
-	return &activityStore{db}
+func New(d *db.DB) core.ActivityStore {
+	m := d.Model(&core.Activity{})
+	return &activityStore{&db.DB{DB: m}}
 }
 
 type activityStore struct {

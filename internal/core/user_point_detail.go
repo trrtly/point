@@ -15,8 +15,7 @@ type (
 		ActivitySpecialID int32  `json:"-"`
 		GoodsID           int32  `json:"-"`
 		GoodsNum          int32  `json:"-"`
-		PointType         int8   `json:"point_type"`
-		UseType           int8   `json:"use_type"`
+		Type              int8   `json:"type"`
 		Status            int8   `json:"status"`
 		Desc              string `json:"desc"`
 		trait.CreatedUpdatedTime

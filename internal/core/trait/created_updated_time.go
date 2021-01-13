@@ -10,8 +10,8 @@ type (
 	CreatedUpdatedTime struct {
 		CreatedAt       time.Time `json:"-"`
 		UpdatedAt       time.Time `json:"-"`
-		CreatedAtString string    `json:"created_at"`
-		UpdatedAtString string    `json:"updated_at"`
+		CreatedAtString string    `json:"created_at" gorm:"-"`
+		UpdatedAtString string    `json:"updated_at" gorm:"-"`
 	}
 )
 

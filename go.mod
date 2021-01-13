@@ -13,6 +13,7 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/klauspost/compress v1.11.4 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
+	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.7.0
 	github.com/speps/go-hashids v2.0.0+incompatible
 	github.com/swaggo/swag v1.7.0

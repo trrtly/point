@@ -2,6 +2,7 @@ package activity
 
 import (
 	"errors"
+	"fmt"
 	"point/internal/core"
 	"point/internal/core/status"
 	"point/internal/handler/api/render"
@@ -45,14 +46,7 @@ func HandlerCreate(
 		if err := c.BodyParser(req); err != nil {
 			return render.Fail(c, err)
 		}
-		logrus.WithFields(
-			logrus.Fields{
-				"uid":  req.UID,
-				"key":  req.Key,
-				"type": req.Type,
-				"val":  req.Val,
-			},
-		).Infoln("receive request")
+
 		validate := validator.New()
 		if err := validate.Struct(req); err != nil {
 			return render.Fail(c, err)
@@ -61,12 +55,9 @@ func HandlerCreate(
 		if err != nil {
 			logrus.WithFields(
 				logrus.Fields{
-					"uid":  req.UID,
-					"key":  req.Key,
-					"type": req.Type,
-					"val":  req.Val,
+					"request": req,
 				},
-			).Errorln("cannot find activity use the key")
+			).Errorln("cannot find activity using special key")
 			return render.Fail(c, err)
 		}
 		if !activity.IsActivite() {
@@ -75,8 +66,8 @@ func HandlerCreate(
 		detail := &core.UserPointDetail{
 			UID:        req.UID,
 			ActivityID: activity.ID,
-			UseType:    core.ActivityTypeGain,
-			Status:     status.Regular,
+			Type:       core.ActivityTypeGain,
+			Status:     status.UserPointDetailArrived,
 		}
 		if activity.HasSpecial() {
 			aspecial, err := special.FindSVal(activity.ID, req.Val)

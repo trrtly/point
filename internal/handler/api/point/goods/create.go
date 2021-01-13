@@ -1,11 +1,11 @@
 package goods
 
 import (
-	"errors"
+	"github.com/pkg/errors"
 	"point/internal/core"
 	"point/internal/core/status"
 	"point/internal/handler/api/render"
-	"point/internal/pkg/hashids"
+	"point/internal/pkg/hd"
 
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
@@ -32,7 +32,7 @@ type Create struct {
 // @Failure 400 object render.Response "失败返回值"
 // @Router /api/point/goods [post]
 func HandlerCreate(
-	hd *hashids.HD,
+	hashid *hd.HD,
 	goods core.ExchangeGoodsStore,
 	gorders core.ExchangeGoodsOrderStore,
 	assets core.UserAssetsStore,
@@ -53,7 +53,7 @@ func HandlerCreate(
 		if err := validate.Struct(req); err != nil {
 			return render.Fail(c, err)
 		}
-		gid, err := hd.DecodeWithError(req.GoodsYyid)
+		gid, err := hashid.DecodeWithError(req.GoodsYyid)
 		if err != nil {
 			return render.Fail(c, err)
 		}

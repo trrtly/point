@@ -1,15 +1,8 @@
-FROM alpine:3.12 as alpine
-RUN apk add -U --no-cache ca-certificates
-
-FROM alpine:3.12
+FROM ubuntu:20.04
 ENV GODEBUG netdns=go
 
-ADD release/point-server /bin/
-
-RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
-
-COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+ADD release/point-server /usr/bin
 
 LABEL com.centurylinklabs.watchtower.stop-signal="SIGINT"
 
-ENTRYPOINT ["/bin/point-server"]
+ENTRYPOINT ["/usr/bin/point-server"]

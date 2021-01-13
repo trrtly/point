@@ -8,8 +8,9 @@ import (
 )
 
 // New returns a new ExchangeexchangeGoodsStore.
-func New(db *db.DB) core.ExchangeGoodsOrderStore {
-	return &exchangeGoodsStore{db}
+func New(d *db.DB) core.ExchangeGoodsOrderStore {
+	m := d.Model(&core.ExchangeGoodsOrder{})
+	return &exchangeGoodsStore{&db.DB{DB: m}}
 }
 
 type exchangeGoodsStore struct {

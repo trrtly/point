@@ -2,7 +2,7 @@ package main
 
 import (
 	"point/cmd/server/config"
-	"point/internal/pkg/hashids"
+	"point/internal/pkg/hd"
 
 	"github.com/google/wire"
 )
@@ -14,8 +14,8 @@ var hashidsSet = wire.NewSet(
 
 // provideDatabase is a Wire provider function that provides a
 // database connection, configured from the environment.
-func provideHashids(config config.Config) (*hashids.HD, error) {
-	hd, err := hashids.New(&config.Hashids)
-	hashids.DefaultHd = hd
-	return hd, err
+func provideHashids(config config.Config) (*hd.HD, error) {
+	hashid, err := hd.New(&config.Hashids)
+	hd.DefaultHd = hashid
+	return hashid, err
 }
