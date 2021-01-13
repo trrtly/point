@@ -2,7 +2,6 @@ package activity
 
 import (
 	"errors"
-	"fmt"
 	"point/internal/core"
 	"point/internal/core/status"
 	"point/internal/handler/api/render"

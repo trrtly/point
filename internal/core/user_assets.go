@@ -3,8 +3,7 @@ package core
 type (
 	// UserAssets defines user_assets table
 	UserAssets struct {
-		ID           int64   `json:"id"`
-		UID          int64   `json:"uid"`
+		UID          int64   `json:"uid" gorm:"primaryKey"`
 		MoneyPoint   float64 `json:"money_point"`
 		ServicePoint float64 `json:"service_point"`
 		CreatedAt    string  `json:"-"`
