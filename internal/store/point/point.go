@@ -18,10 +18,15 @@ type moneyStore struct {
 }
 
 // List returns a user assets from the datastore.
-func (s *moneyStore) List(uid int64, ptype int8, page, pageSize int) ([]*core.UserPointDetail, int64, error) {
+func (s *moneyStore) List(uid int64, fetchMoney bool, page, pageSize int) ([]*core.UserPointDetail, int64, error) {
 	var out []*core.UserPointDetail
 	var count int64
-	sdb := s.db.Where("uid = ?", uid).Where("point_type", ptype)
+	sdb := s.db.Where("uid = ?", uid)
+	if fetchMoney {
+		sdb.Where("money_point <> ?", 0)
+	} else {
+		sdb.Where("service_point <> ?", 0)
+	}
 	err := sdb.Scopes(db.Paginate(page, pageSize)).Find(&out).Error
 	if err != nil {
 		return nil, 0, err

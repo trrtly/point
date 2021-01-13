@@ -25,7 +25,7 @@ type (
 	// UserPointDetailStore defines operations for working with user_money_point_detail.
 	UserPointDetailStore interface {
 		// Find returns a user_money_point_detail from the db.
-		List(int64, int8, int, int) ([]*UserPointDetail, int64, error)
+		List(int64, bool, int, int) ([]*UserPointDetail, int64, error)
 		// Create persists a new UserPointDetail in the db.
 		Create(*UserPointDetail) error
 	}

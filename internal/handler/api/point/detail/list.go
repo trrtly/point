@@ -9,10 +9,10 @@ import (
 )
 
 type List struct {
-	UID      int64 `query:"uid,required,number"`
-	PType    int8  `query:"ptype,number"`
-	Page     int   `query:"page,number"`
-	PageSize int   `query:"pageSize,number"`
+	UID        int64 `query:"uid,required,number"`
+	FetchMoney bool  `query:"fetchMoney,number"`
+	Page       int   `query:"page,number"`
+	PageSize   int   `query:"pageSize,number"`
 }
 
 type response struct {
@@ -25,7 +25,7 @@ type response struct {
 // @Accept json
 // @Produce json
 // @Param uid query int true "uid"
-// @Param ptype query int true "积分类型 1：消费积分，2：服务积分"
+// @Param fetchMoney query bool true "是否获取消费积分，true：返回消费积分，false：返回服务积分"
 // @Param page query int false "当前页码"
 // @Param page_size query int false "每页显示条数"
 // @Success 200 object render.Response "成功返回值"
@@ -44,7 +44,7 @@ func HandlerList(
 		if err := validate.Struct(req); err != nil {
 			return render.Fail(c, err)
 		}
-		details, total, err := detail.List(req.UID, req.PType, req.Page, req.PageSize)
+		details, total, err := detail.List(req.UID, req.FetchMoney, req.Page, req.PageSize)
 		if err != nil {
 			return render.Fail(c, err)
 		}

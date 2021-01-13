@@ -56,7 +56,7 @@ func HandlerCreate(
 				logrus.Fields{
 					"request": req,
 				},
-			).Errorln("cannot find activity using special key")
+			).Errorln("/api/point/activity: cannot find activity using special key")
 			return render.Fail(c, err)
 		}
 		if !activity.IsActivite() {
@@ -83,8 +83,16 @@ func HandlerCreate(
 			detail.Desc = activity.PointDesc
 		}
 		if detail.IsPointGtZero() {
-			assets.IncrPoint(detail.UID, detail.MoneyPoint, detail.ServicePoint)
-			point.Create(detail)
+			err := assets.IncrPoint(detail.UID, detail.MoneyPoint, detail.ServicePoint)
+			if err == nil {
+				point.Create(detail)
+			} else {
+				logrus.WithFields(
+					logrus.Fields{
+						"request": req,
+					},
+				).Errorln("/api/point/activity: 用户积分更新失败")
+			}
 		}
 
 		return render.Success(c, detail)
