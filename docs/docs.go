@@ -224,12 +224,15 @@ var doc = `{
         "activity.Create": {
             "type": "object",
             "required": [
-                "key",
-                "uid"
+                "key"
             ],
             "properties": {
                 "key": {
                     "description": "事件编号",
+                    "type": "string"
+                },
+                "openid": {
+                    "description": "微信 openid，针对未登录用户",
                     "type": "string"
                 },
                 "type": {

@@ -27,6 +27,9 @@ func (s *assetsStore) Find(uid int64) (*core.UserAssets, error) {
 
 // IncrPoint increment a user's money or service point or both
 func (s *assetsStore) IncrPoint(uid int64, moneyPoint float64, servicePoint float64) error {
+	if uid <= 0 {
+		return nil
+	}
 	upd := map[string]interface{}{
 		"money_point":   gorm.Expr("money_point + ?", moneyPoint),
 		"service_point": gorm.Expr("service_point + ?", servicePoint),
