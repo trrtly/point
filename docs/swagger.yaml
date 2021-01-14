@@ -48,6 +48,60 @@ definitions:
       yyid:
         type: string
     type: object
+  core.UserPointDetail:
+    properties:
+      created_at:
+        type: string
+      desc:
+        type: string
+      money_point:
+        type: number
+      service_point:
+        type: number
+      status:
+        type: integer
+      type:
+        type: integer
+      updated_at:
+        type: string
+      yyid:
+        type: string
+    type: object
+  detail.respData:
+    properties:
+      list:
+        description: 积分列表
+        items:
+          $ref: '#/definitions/core.UserPointDetail'
+        type: array
+      page:
+        description: 页码值
+        example: 1
+        type: integer
+      page_size:
+        description: 每页显示条数
+        example: 20
+        type: integer
+      total:
+        description: 总条数
+        example: 100
+        type: integer
+    type: object
+  detail.response:
+    properties:
+      code:
+        description: |-
+          `code` 错误码
+          全局错误码说明：
+          `1001` 用户不存在
+        example: 200
+        type: integer
+      data:
+        $ref: '#/definitions/detail.respData'
+      msg:
+        description: '`msg` 错误信息'
+        type: string
+    type: object
   goods.Create:
     properties:
       goodsNum:
@@ -148,6 +202,48 @@ paths:
       summary: 添加事件积分
       tags:
       - 事件积分
+  /api/point/details:
+    get:
+      consumes:
+      - application/json
+      description: 获取积分明细列表
+      parameters:
+      - description: uid
+        in: query
+        name: uid
+        required: true
+        type: integer
+      - description: 是否获取服务积分，true：返回服务积分，false：返回消费积分
+        in: query
+        name: fetchService
+        required: true
+        type: boolean
+      - description: 当前页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页显示条数
+        in: query
+        name: pageSize
+        type: integer
+      - description: 类型 1：发放，2：使用， 0或不传为全部
+        in: query
+        name: type
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回值
+          schema:
+            $ref: '#/definitions/detail.response'
+        "400":
+          description: 失败返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+      summary: 获取积分明细列表
+      tags:
+      - 积分明细列表
   /api/point/goods:
     get:
       consumes:
@@ -206,42 +302,4 @@ paths:
       summary: 积分兑换商品
       tags:
       - 兑换商品
-  /api/points:
-    get:
-      consumes:
-      - application/json
-      description: 获取积分明细列表
-      parameters:
-      - description: uid
-        in: query
-        name: uid
-        required: true
-        type: integer
-      - description: 积分类型 1：消费积分，2：服务积分
-        in: query
-        name: ptype
-        required: true
-        type: integer
-      - description: 当前页码
-        in: query
-        name: page
-        type: integer
-      - description: 每页显示条数
-        in: query
-        name: page_size
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功返回值
-          schema:
-            $ref: '#/definitions/render.Response'
-        "400":
-          description: 失败返回值
-          schema:
-            $ref: '#/definitions/render.Response'
-      summary: 获取积分明细列表
-      tags:
-      - 积分明细列表
 swagger: "2.0"

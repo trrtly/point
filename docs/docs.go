@@ -68,6 +68,69 @@ var doc = `{
                 }
             }
         },
+        "/api/point/details": {
+            "get": {
+                "description": "获取积分明细列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "积分明细列表"
+                ],
+                "summary": "获取积分明细列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "uid",
+                        "name": "uid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "是否获取服务积分，true：返回服务积分，false：返回消费积分",
+                        "name": "fetchService",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "当前页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页显示条数",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "类型 1：发放，2：使用， 0或不传为全部",
+                        "name": "type",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回值",
+                        "schema": {
+                            "$ref": "#/definitions/detail.response"
+                        }
+                    },
+                    "400": {
+                        "description": "失败返回值",
+                        "schema": {
+                            "$ref": "#/definitions/render.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/point/goods": {
             "get": {
                 "description": "积分兑换商品列表",
@@ -155,63 +218,6 @@ var doc = `{
                     }
                 }
             }
-        },
-        "/api/points": {
-            "get": {
-                "description": "获取积分明细列表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "积分明细列表"
-                ],
-                "summary": "获取积分明细列表",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "uid",
-                        "name": "uid",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "积分类型 1：消费积分，2：服务积分",
-                        "name": "ptype",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "当前页码",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "每页显示条数",
-                        "name": "page_size",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功返回值",
-                        "schema": {
-                            "$ref": "#/definitions/render.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "失败返回值",
-                        "schema": {
-                            "$ref": "#/definitions/render.Response"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
@@ -274,6 +280,79 @@ var doc = `{
                     "example": 100
                 },
                 "yyid": {
+                    "type": "string"
+                }
+            }
+        },
+        "core.UserPointDetail": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "money_point": {
+                    "type": "number"
+                },
+                "service_point": {
+                    "type": "number"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "yyid": {
+                    "type": "string"
+                }
+            }
+        },
+        "detail.respData": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "description": "积分列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/core.UserPointDetail"
+                    }
+                },
+                "page": {
+                    "description": "页码值",
+                    "type": "integer",
+                    "example": 1
+                },
+                "page_size": {
+                    "description": "每页显示条数",
+                    "type": "integer",
+                    "example": 20
+                },
+                "total": {
+                    "description": "总条数",
+                    "type": "integer",
+                    "example": 100
+                }
+            }
+        },
+        "detail.response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "` + "`" + `code` + "`" + ` 错误码\n全局错误码说明：\n` + "`" + `1001` + "`" + ` 用户不存在",
+                    "type": "integer",
+                    "example": 200
+                },
+                "data": {
+                    "$ref": "#/definitions/detail.respData"
+                },
+                "msg": {
+                    "description": "` + "`" + `msg` + "`" + ` 错误信息",
                     "type": "string"
                 }
             }

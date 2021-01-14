@@ -22,10 +22,18 @@ type (
 		trait.Point
 	}
 
+	UserPointDetailListRequest struct {
+		UID          int64 `query:"uid,required,number"`
+		FetchService bool  `query:"fetchService,number"`
+		Page         int   `query:"page,number"`
+		PageSize     int   `query:"pageSize,number"`
+		Type         int8  `query:"type,number"`
+	}
+
 	// UserPointDetailStore defines operations for working with user_money_point_detail.
 	UserPointDetailStore interface {
 		// Find returns a user_money_point_detail from the db.
-		List(int64, bool, int, int) ([]*UserPointDetail, int64, error)
+		List(*UserPointDetailListRequest) ([]*UserPointDetail, int64, error)
 		// Create persists a new UserPointDetail in the db.
 		Create(*UserPointDetail) error
 	}
