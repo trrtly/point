@@ -42,7 +42,6 @@ type response struct {
 // @Router /api/point/goods [get]
 func HandlerList(
 	goods core.ExchangeGoodsStore,
-	gorders core.ExchangeGoodsOrderStore,
 	assets core.UserAssetsStore,
 ) fiber.Handler {
 	return func(c *fiber.Ctx) error {

@@ -1,11 +1,12 @@
 package goods
 
 import (
-	"github.com/pkg/errors"
 	"point/internal/core"
 	"point/internal/core/status"
 	"point/internal/handler/api/render"
 	"point/internal/pkg/hd"
+
+	"github.com/pkg/errors"
 
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
@@ -18,7 +19,7 @@ type Create struct {
 	// 商品编号
 	GoodsYyid string `json:"goodsYyid" validate:"required"`
 	// 商品数量
-	GoodsNum uint32 `json:"goodsNum" validate:"required,number"`
+	GoodsNum int32 `json:"goodsNum" validate:"required,number"`
 }
 
 // @Summary 积分兑换商品
@@ -31,20 +32,14 @@ type Create struct {
 // @Success 200 object render.Response "成功返回值"
 // @Failure 400 object render.Response "失败返回值"
 // @Router /api/point/goods [post]
-func HandlerCreate(
+func HandlerExchange(
 	hashid *hd.HD,
 	goods core.ExchangeGoodsStore,
-	gorders core.ExchangeGoodsOrderStore,
 	assets core.UserAssetsStore,
+	detail core.UserPointDetailStore,
 ) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		req := new(Create)
-
-		logrus.WithFields(
-			logrus.Fields{
-				"data": string(c.Body()),
-			},
-		).Errorln("/api/point/goods request data")
 
 		if err := c.BodyParser(req); err != nil {
 			return render.Fail(c, err)
@@ -74,16 +69,28 @@ func HandlerCreate(
 		if uassets.ServicePoint < egoods.ServicePoint {
 			return render.Fail(c, errors.New("服务积分不足"))
 		}
-		gorder := &core.ExchangeGoodsOrder{
+		detailm := &core.UserPointDetail{
 			UID:      req.UID,
+			Type:     core.ActivityTypeUse,
+			Status:   status.UserPointDetailArrived,
 			GoodsID:  egoods.ID,
 			GoodsNum: req.GoodsNum,
-			Status:   status.Regular,
+			Desc:     egoods.UserDetailDesc,
 		}
-		gorder.MoneyPoint = egoods.MoneyPoint * float64(req.GoodsNum)
-		gorder.ServicePoint = egoods.ServicePoint * float64(req.GoodsNum)
+		detailm.MoneyPoint = egoods.MoneyPoint * float64(req.GoodsNum)
+		detailm.ServicePoint = egoods.ServicePoint * float64(req.GoodsNum)
 
-		err = assets.DecrPoint(req.UID, gorder.MoneyPoint, gorder.ServicePoint)
+		err = detail.Create(detailm)
+		if err != nil {
+			logrus.WithFields(
+				logrus.Fields{
+					"request": req,
+					"detailm": detailm,
+				},
+			).Errorln("/api/point/goods 创建积分详情失败", err)
+		}
+
+		err = assets.DecrPoint(req.UID, detailm.MoneyPoint, detailm.ServicePoint)
 		if err != nil {
 			logrus.WithFields(
 				logrus.Fields{
@@ -91,22 +98,10 @@ func HandlerCreate(
 					"egoods":  egoods,
 					"uassets": uassets,
 				},
-			).Errorln("/api/point/goods decr fail")
+			).Errorln("/api/point/goods 用户积分资产扣除失败", err)
 			return render.Fail(c, errors.New("兑换失败，请稍后重试"))
 		}
 
-		err = gorders.Create(gorder)
-		if err != nil {
-			logrus.WithFields(
-				logrus.Fields{
-					"request":        req,
-					"exchange_goods": egoods,
-					"user_assets":    uassets,
-					"goods_order":    gorder,
-				},
-			).Errorln("/api/point/goods create goods order fail")
-		}
-
-		return render.Success(c, "ok")
+		return render.Success(c, detailm)
 	}
 }

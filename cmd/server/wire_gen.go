@@ -26,8 +26,7 @@ func InitializeApplication(config2 config.Config) (application, error) {
 	if err != nil {
 		return application{}, err
 	}
-	exchangeGoodsOrderStore := provideExchangeGoodsOrderStore(db)
-	server := api.New(userAssetsStore, activityStore, activitySpecialStore, userPointDetailStore, exchangeGoodsStore, hd, exchangeGoodsOrderStore)
+	server := api.New(userAssetsStore, activityStore, activitySpecialStore, userPointDetailStore, exchangeGoodsStore, hd)
 	app := provideRouter(server)
 	serverServer := provideServer(app, config2)
 	mainApplication := newApplication(serverServer, userAssetsStore, hd)

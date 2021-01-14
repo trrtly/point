@@ -13,7 +13,7 @@ type (
 		UID               int64  `json:"-"`
 		ActivityID        int32  `json:"-"`
 		ActivitySpecialID int32  `json:"-"`
-		GoodsID           int32  `json:"-"`
+		GoodsID           int64  `json:"-"`
 		GoodsNum          int32  `json:"-"`
 		Type              int8   `json:"type"`
 		Status            int8   `json:"status"`

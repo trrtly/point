@@ -20,8 +20,7 @@ type assetsStore struct {
 // Find returns a user assets from the datastore.
 func (s *assetsStore) Find(uid int64) (*core.UserAssets, error) {
 	out := &core.UserAssets{}
-	err := s.db.Select("id,uid,money_point,service_point").
-		Where("uid = ?", uid).
+	err := s.db.Where("uid = ?", uid).
 		First(out).Error
 	return out, err
 }

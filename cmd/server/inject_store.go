@@ -6,7 +6,6 @@ import (
 	"point/internal/store/activity"
 	"point/internal/store/assets"
 	"point/internal/store/goods"
-	"point/internal/store/order"
 	"point/internal/store/point"
 	"point/internal/store/shared/db"
 	"point/internal/store/special"
@@ -22,7 +21,6 @@ var storeSet = wire.NewSet(
 	provideActivitySpecialStore,
 	providePointDetailStore,
 	provideExchangeGoodsStore,
-	provideExchangeGoodsOrderStore,
 )
 
 // provideDatabase is a Wire provider function that provides a
@@ -64,11 +62,4 @@ func providePointDetailStore(db *db.DB) core.UserPointDetailStore {
 func provideExchangeGoodsStore(db *db.DB) core.ExchangeGoodsStore {
 	goods := goods.New(db)
 	return goods
-}
-
-// provideExchangeGoodsOrderStore is a Wire provider function that provides a
-// provideExchangeGoodsOrderStore
-func provideExchangeGoodsOrderStore(db *db.DB) core.ExchangeGoodsOrderStore {
-	gorder := order.New(db)
-	return gorder
 }

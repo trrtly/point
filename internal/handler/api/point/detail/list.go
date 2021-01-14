@@ -9,10 +9,10 @@ import (
 )
 
 type List struct {
-	UID        int64 `query:"uid,required,number"`
-	FetchMoney bool  `query:"fetchMoney,number"`
-	Page       int   `query:"page,number"`
-	PageSize   int   `query:"pageSize,number"`
+	UID          int64 `query:"uid,required,number"`
+	FetchService bool  `query:"fetchService,number"`
+	Page         int   `query:"page,number"`
+	PageSize     int   `query:"pageSize,number"`
 }
 
 type response struct {
@@ -25,12 +25,12 @@ type response struct {
 // @Accept json
 // @Produce json
 // @Param uid query int true "uid"
-// @Param fetchMoney query bool true "是否获取消费积分，true：返回消费积分，false：返回服务积分"
+// @Param fetchService query bool true "是否获取服务积分，true：返回服务积分，false：返回消费积分"
 // @Param page query int false "当前页码"
 // @Param page_size query int false "每页显示条数"
 // @Success 200 object render.Response "成功返回值"
 // @Failure 400 object render.Response "失败返回值"
-// @Router /api/points [get]
+// @Router /api/point/details [get]
 func HandlerList(
 	detail core.UserPointDetailStore,
 ) fiber.Handler {
@@ -44,7 +44,7 @@ func HandlerList(
 		if err := validate.Struct(req); err != nil {
 			return render.Fail(c, err)
 		}
-		details, total, err := detail.List(req.UID, req.FetchMoney, req.Page, req.PageSize)
+		details, total, err := detail.List(req.UID, req.FetchService, req.Page, req.PageSize)
 		if err != nil {
 			return render.Fail(c, err)
 		}

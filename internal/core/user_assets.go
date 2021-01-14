@@ -1,13 +1,15 @@
 package core
 
+import "time"
+
 type (
 	// UserAssets defines user_assets table
 	UserAssets struct {
-		UID          int64   `json:"uid" gorm:"primaryKey"`
-		MoneyPoint   float64 `json:"money_point"`
-		ServicePoint float64 `json:"service_point"`
-		CreatedAt    string  `json:"-"`
-		UpdatedAt    string  `json:"-"`
+		UID          int64     `json:"uid" gorm:"primaryKey"`
+		MoneyPoint   float64   `json:"money_point"`
+		ServicePoint float64   `json:"service_point"`
+		CreatedAt    time.Time `json:"-"`
+		UpdatedAt    time.Time `json:"-"`
 	}
 
 	// UserAssetsStore defines operations for working with user_assets.

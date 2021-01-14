@@ -19,7 +19,6 @@ type Server struct {
 	Detail     core.UserPointDetailStore
 	HD         *hd.HD
 	Goods      core.ExchangeGoodsStore
-	GoodsOrder core.ExchangeGoodsOrderStore
 }
 
 func New(
@@ -29,7 +28,6 @@ func New(
 	detail core.UserPointDetailStore,
 	goods core.ExchangeGoodsStore,
 	hashid *hd.HD,
-	goodsOrder core.ExchangeGoodsOrderStore,
 ) Server {
 	return Server{
 		Assets:     assets,
@@ -38,7 +36,6 @@ func New(
 		Detail:     detail,
 		HD:         hashid,
 		Goods:      goods,
-		GoodsOrder: goodsOrder,
 	}
 }
 
@@ -47,8 +44,8 @@ func (s Server) Handler(r fiber.Router) fiber.Router {
 	r.Use(logger.New())
 	r.Get("/assets", assets.HandleFind(s.Assets))
 	r.Post("/point/activity", activity.HandlerCreate(s.Activity, s.Special, s.Detail, s.Assets))
-	r.Post("/point/goods", goods.HandlerCreate(s.HD, s.Goods, s.GoodsOrder, s.Assets))
-	r.Get("/point/goods", goods.HandlerList(s.Goods, s.GoodsOrder, s.Assets))
+	r.Post("/point/goods", goods.HandlerExchange(s.HD, s.Goods, s.Assets, s.Detail))
+	r.Get("/point/goods", goods.HandlerList(s.Goods, s.Assets))
 	r.Get("/point/details", detail.HandlerList(s.Detail))
 	return r
 }

@@ -8,8 +8,8 @@ import (
 type (
 	// CreatedUpdatedTime defines a StartEndTime is alife
 	CreatedUpdatedTime struct {
-		CreatedAt       time.Time `json:"-"`
-		UpdatedAt       time.Time `json:"-"`
+		CreatedAt       time.Time `json:"-" gorm:"autoCreateTime"`
+		UpdatedAt       time.Time `json:"-" gorm:"autoUpdateTime"`
 		CreatedAtString string    `json:"created_at" gorm:"-"`
 		UpdatedAtString string    `json:"updated_at" gorm:"-"`
 	}
