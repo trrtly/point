@@ -7,8 +7,7 @@ import (
 
 // New returns a new ActivitySpecialStore.
 func New(d *db.DB) core.ActivitySpecialStore {
-	m := d.Model(&core.ActivitySpecial{})
-	return &specialStore{&db.DB{DB: m}}
+	return &specialStore{d}
 }
 
 type specialStore struct {
@@ -20,7 +19,7 @@ func (s *specialStore) FindSVal(
 	activityID int32, sval string,
 ) (*core.ActivitySpecial, error) {
 	out := &core.ActivitySpecial{}
-	err := s.db.Select("*").
+	err := s.db.Model(&core.ActivitySpecial{}).
 		Where("activity_id = ?", activityID).
 		Where("s_value = ?", sval).
 		First(out).Error

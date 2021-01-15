@@ -9,8 +9,7 @@ import (
 
 // New returns a new UserStore.
 func New(d *db.DB) core.UserPointDetailStore {
-	m := d.Model(&core.UserPointDetail{})
-	return &moneyStore{&db.DB{DB: m}}
+	return &moneyStore{d}
 }
 
 type moneyStore struct {
@@ -21,7 +20,7 @@ type moneyStore struct {
 func (s *moneyStore) List(r *core.UserPointDetailListRequest) ([]*core.UserPointDetail, int64, error) {
 	var out []*core.UserPointDetail
 	var count int64
-	sdb := s.db.Where("uid = ?", r.UID)
+	sdb := s.db.Model(&core.UserPointDetail{}).Where("uid = ?", r.UID)
 	if r.Type > 0 {
 		sdb.Where("type = ?", r.Type)
 	}
@@ -40,7 +39,7 @@ func (s *moneyStore) List(r *core.UserPointDetailListRequest) ([]*core.UserPoint
 
 // Create persists a new UserPointDetail in the db.
 func (s *moneyStore) Create(m *core.UserPointDetail) error {
-	res := s.db.Create(m)
+	res := s.db.Model(&core.UserPointDetail{}).Create(m)
 	if res.Error != nil {
 		logrus.WithFields(
 			logrus.Fields{

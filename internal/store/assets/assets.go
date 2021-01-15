@@ -9,8 +9,7 @@ import (
 
 // New returns a new UserStore.
 func New(d *db.DB) core.UserAssetsStore {
-	m := d.Model(&core.UserAssets{})
-	return &assetsStore{&db.DB{DB: m}}
+	return &assetsStore{d}
 }
 
 type assetsStore struct {
@@ -20,7 +19,8 @@ type assetsStore struct {
 // Find returns a user assets from the datastore.
 func (s *assetsStore) Find(uid int64) (*core.UserAssets, error) {
 	out := &core.UserAssets{}
-	err := s.db.Where("uid = ?", uid).
+	err := s.db.Model(&core.UserAssets{}).
+		Where("uid = ?", uid).
 		First(out).Error
 	return out, err
 }
@@ -34,7 +34,7 @@ func (s *assetsStore) IncrPoint(uid int64, moneyPoint float64, servicePoint floa
 		"money_point":   gorm.Expr("money_point + ?", moneyPoint),
 		"service_point": gorm.Expr("service_point + ?", servicePoint),
 	}
-	return s.db.Where("uid = ?", uid).Updates(upd).Error
+	return s.db.Model(&core.UserAssets{}).Where("uid = ?", uid).Updates(upd).Error
 }
 
 // DecrPoint decrement a user's money or service point or both
@@ -43,5 +43,5 @@ func (s *assetsStore) DecrPoint(uid int64, moneyPoint float64, servicePoint floa
 		"money_point":   gorm.Expr("money_point - ?", moneyPoint),
 		"service_point": gorm.Expr("service_point - ?", servicePoint),
 	}
-	return s.db.Where("uid = ?", uid).Updates(upd).Error
+	return s.db.Model(&core.UserAssets{}).Where("uid = ?", uid).Updates(upd).Error
 }
