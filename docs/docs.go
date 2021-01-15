@@ -515,7 +515,7 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "http://point:8080",
 	BasePath:    "",
 	Schemes:     []string{},
-	Title:       "优药积分系统 api",
+	Title:       "优药积分服务",
 	Description: "优药积分系统 api",
 }
 

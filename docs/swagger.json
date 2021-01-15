@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "优药积分系统 api",
-        "title": "优药积分系统 api",
+        "title": "优药积分服务",
         "contact": {
             "name": "wenlong",
             "url": "http://yy-git.youyao99.com/youyao/point",

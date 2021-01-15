@@ -15,7 +15,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-// @title 优药积分系统 api
+// @title 优药积分服务
 // @version 1.0
 // @description 优药积分系统 api
 // @contact.name wenlong

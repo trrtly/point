@@ -1,6 +1,6 @@
 # 项目概述
 
-* 产品名称：优药积分系统 api
+* 产品名称：优药积分服务
 * 项目代号：point
 * 官方地址：<http://yy-git.youyao99.com/youyao/point>
 

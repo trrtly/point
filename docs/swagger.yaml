@@ -187,7 +187,7 @@ info:
     name: wenlong
     url: http://yy-git.youyao99.com/youyao/point
   description: 优药积分系统 api
-  title: 优药积分系统 api
+  title: 优药积分服务
   version: "1.0"
 paths:
   /api/point/activity:
