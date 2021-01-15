@@ -168,6 +168,18 @@ definitions:
         description: '`msg` 错误信息'
         type: string
     type: object
+  wechat.Bind:
+    properties:
+      openid:
+        description: 微信 openid，针对未登录用户
+        type: string
+      uid:
+        description: 用户 id
+        type: integer
+    required:
+    - openid
+    - uid
+    type: object
 host: http://point:8080
 info:
   contact:
@@ -306,4 +318,30 @@ paths:
       summary: 积分兑换商品
       tags:
       - 兑换商品
+  /api/wechat/bind:
+    post:
+      consumes:
+      - application/json
+      description: 绑定微信关联关系
+      parameters:
+      - description: 请求参数
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/wechat.Bind'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+        "400":
+          description: 失败返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+      summary: 绑定微信关联关系
+      tags:
+      - 事件积分
 swagger: "2.0"

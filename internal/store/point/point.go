@@ -17,7 +17,9 @@ type moneyStore struct {
 }
 
 // List returns a user assets from the datastore.
-func (s *moneyStore) List(r *core.UserPointDetailListRequest) ([]*core.UserPointDetail, int64, error) {
+func (s *moneyStore) List(
+	r *core.UserPointDetailListRequest,
+) ([]*core.UserPointDetail, int64, error) {
 	var out []*core.UserPointDetail
 	var count int64
 	sdb := s.db.Model(&core.UserPointDetail{}).Where("uid = ?", r.UID)
@@ -48,4 +50,13 @@ func (s *moneyStore) Create(m *core.UserPointDetail) error {
 		).Errorln("create UserPointDetail fail")
 	}
 	return res.Error
+}
+
+// BindUIDOpenid bind uid and openid.
+func (s *moneyStore) BindUIDOpenid(uid int64, openid string) error {
+	upd := map[string]interface{}{
+		"uid": uid,
+	}
+	return s.db.Debug().Model(&core.UserPointDetail{}).
+		Where("openid = ?", openid).Updates(upd).Error
 }

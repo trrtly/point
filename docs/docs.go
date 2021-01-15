@@ -218,6 +218,46 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/api/wechat/bind": {
+            "post": {
+                "description": "绑定微信关联关系",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "事件积分"
+                ],
+                "summary": "绑定微信关联关系",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/wechat.Bind"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回值",
+                        "schema": {
+                            "$ref": "#/definitions/render.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "失败返回值",
+                        "schema": {
+                            "$ref": "#/definitions/render.Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -437,6 +477,23 @@ var doc = `{
                 "msg": {
                     "description": "` + "`" + `msg` + "`" + ` 错误信息",
                     "type": "string"
+                }
+            }
+        },
+        "wechat.Bind": {
+            "type": "object",
+            "required": [
+                "openid",
+                "uid"
+            ],
+            "properties": {
+                "openid": {
+                    "description": "微信 openid，针对未登录用户",
+                    "type": "string"
+                },
+                "uid": {
+                    "description": "用户 id",
+                    "type": "integer"
                 }
             }
         }

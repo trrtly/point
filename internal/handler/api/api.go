@@ -6,6 +6,7 @@ import (
 	"point/internal/handler/api/point/activity"
 	"point/internal/handler/api/point/detail"
 	"point/internal/handler/api/point/goods"
+	"point/internal/handler/api/wechat"
 	"point/internal/pkg/hd"
 
 	"github.com/gofiber/fiber/v2"
@@ -47,5 +48,6 @@ func (s Server) Handler(r fiber.Router) fiber.Router {
 	r.Post("/point/goods", goods.HandlerExchange(s.HD, s.Goods, s.Assets, s.Detail))
 	r.Get("/point/goods", goods.HandlerList(s.Goods, s.Assets))
 	r.Get("/point/details", detail.HandlerList(s.Detail))
+	r.Get("/wechat/bind", wechat.HandleBind(s.Detail))
 	return r
 }

@@ -35,6 +35,8 @@ type (
 		List(*UserPointDetailListRequest) ([]*UserPointDetail, int64, error)
 		// Create persists a new user_point_detail record in the db.
 		Create(*UserPointDetail) error
+		// BindUIDOpenid bind uid and openid.
+		BindUIDOpenid(int64, string) error
 	}
 )
 
