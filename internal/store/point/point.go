@@ -52,8 +52,8 @@ func (s *moneyStore) Create(m *core.UserPointDetail) error {
 	return res.Error
 }
 
-// BindUIDOpenid bind uid and openid.
-func (s *moneyStore) BindUIDOpenid(uid, wechatUserID int64) error {
+// BindUIDWechatUID bind uid and wechat user id.
+func (s *moneyStore) BindUIDWechatUID(uid, wechatUserID int64) error {
 	upd := map[string]interface{}{
 		"uid": uid,
 	}

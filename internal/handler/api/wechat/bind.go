@@ -40,7 +40,7 @@ func HandleBind(
 		if err := validate.Struct(req); err != nil {
 			return render.Fail(c, err)
 		}
-		err := detail.BindUIDOpenid(req.UID, req.WechatUserID)
+		err := detail.BindUIDWechatUID(req.UID, req.WechatUserID)
 		if err != nil {
 			logrus.WithFields(
 				logrus.Fields{
