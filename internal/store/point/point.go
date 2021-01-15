@@ -53,10 +53,10 @@ func (s *moneyStore) Create(m *core.UserPointDetail) error {
 }
 
 // BindUIDOpenid bind uid and openid.
-func (s *moneyStore) BindUIDOpenid(uid int64, openid string) error {
+func (s *moneyStore) BindUIDOpenid(uid, wechatUserID int64) error {
 	upd := map[string]interface{}{
 		"uid": uid,
 	}
 	return s.db.Debug().Model(&core.UserPointDetail{}).
-		Where("openid = ?", openid).Updates(upd).Error
+		Where("wechat_user_id = ?", wechatUserID).Updates(upd).Error
 }

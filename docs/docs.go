@@ -483,16 +483,16 @@ var doc = `{
         "wechat.Bind": {
             "type": "object",
             "required": [
-                "openid",
-                "uid"
+                "uid",
+                "wechatUserId"
             ],
             "properties": {
-                "openid": {
-                    "description": "微信 openid",
-                    "type": "string"
-                },
                 "uid": {
                     "description": "用户 id",
+                    "type": "integer"
+                },
+                "wechatUserId": {
+                    "description": "wechat_user 表 id",
                     "type": "integer"
                 }
             }

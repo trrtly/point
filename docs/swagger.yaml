@@ -170,15 +170,15 @@ definitions:
     type: object
   wechat.Bind:
     properties:
-      openid:
-        description: 微信 openid
-        type: string
       uid:
         description: 用户 id
         type: integer
+      wechatUserId:
+        description: wechat_user 表 id
+        type: integer
     required:
-    - openid
     - uid
+    - wechatUserId
     type: object
 host: http://point:8080
 info:

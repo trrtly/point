@@ -14,8 +14,8 @@ import (
 type Bind struct {
 	// 用户 id
 	UID int64 `json:"uid" validate:"required,number"`
-	// 微信 openid
-	Openid string `json:"openid" validate:"required"`
+	// wechat_user 表 id
+	WechatUserID int64 `json:"wechatUserId" validate:"required"`
 }
 
 // @Summary 绑定微信关联关系
@@ -40,7 +40,7 @@ func HandleBind(
 		if err := validate.Struct(req); err != nil {
 			return render.Fail(c, err)
 		}
-		err := detail.BindUIDOpenid(req.UID, req.Openid)
+		err := detail.BindUIDOpenid(req.UID, req.WechatUserID)
 		if err != nil {
 			logrus.WithFields(
 				logrus.Fields{
