@@ -27,6 +27,7 @@ type Create struct {
 
 // @Summary 添加事件积分
 // @Description 添加事件积分，问卷事件 `key`: `question_answer`；页面浏览事件 `key`: `page_view`
+// @Description 登录用户传 `uid` ，未登录用户传 `openid`
 // @Tags 事件积分
 // @Version 1.0
 // @Accept json

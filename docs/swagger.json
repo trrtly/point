@@ -14,7 +14,7 @@
     "paths": {
         "/api/point/activity": {
             "post": {
-                "description": "添加事件积分，问卷事件 `key`: `question_answer`；页面浏览事件 `key`: `page_view`",
+                "description": "添加事件积分，问卷事件 `key`: `question_answer`；页面浏览事件 `key`: `page_view`\n登录用户传 `uid` ，未登录用户传 `openid`",
                 "consumes": [
                     "application/json"
                 ],
