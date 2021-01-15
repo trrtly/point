@@ -488,7 +488,7 @@ var doc = `{
             ],
             "properties": {
                 "openid": {
-                    "description": "微信 openid，针对未登录用户",
+                    "description": "微信 openid",
                     "type": "string"
                 },
                 "uid": {

@@ -14,7 +14,7 @@ import (
 type Bind struct {
 	// 用户 id
 	UID int64 `json:"uid" validate:"required,number"`
-	// 微信 openid，针对未登录用户
+	// 微信 openid
 	Openid string `json:"openid" validate:"required"`
 }
 
