@@ -2,7 +2,6 @@ package trait
 
 import (
 	"time"
-	"point/internal/core/status"
 )
 
 type (
@@ -10,14 +9,9 @@ type (
 	StartEndTime struct {
 		StartTime time.Time `json:"-"`
 		EndTime   time.Time `json:"-"`
-		Status    int8      `json:"-"`
+		Status
 	}
 )
-
-// IsRegular defines the StartEndTime record is regular
-func (a *StartEndTime) IsRegular() bool {
-	return a.Status == status.Regular
-}
 
 // IsStarted defines the StartEndTime is started
 func (a *StartEndTime) IsStarted() bool {

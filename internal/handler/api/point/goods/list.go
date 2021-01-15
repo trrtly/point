@@ -46,7 +46,6 @@ func HandlerList(
 ) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		req := new(List)
-
 		if err := c.QueryParser(req); err != nil {
 			return render.Fail(c, err)
 		}

@@ -5,7 +5,7 @@ import (
 )
 
 type (
-	// UserPointDetail defines user_money_point_detail table
+	// UserPointDetail defines user_point_detail table
 	UserPointDetail struct {
 		UID               int64  `json:"-"`
 		Openid            string `json:"-"`
@@ -17,9 +17,10 @@ type (
 		Status            int8   `json:"status"`
 		Desc              string `json:"desc"`
 		trait.IDYyidCreatedUpdatedTime
-		trait.Point
+		trait.MoneyServicePoint
 	}
 
+	// UserPointDetailListRequest defines api/point/details request data struct
 	UserPointDetailListRequest struct {
 		UID          int64 `query:"uid,required,number"`
 		FetchService bool  `query:"fetchService,number"`
@@ -28,16 +29,16 @@ type (
 		Type         int8  `query:"type,number"`
 	}
 
-	// UserPointDetailStore defines operations for working with user_money_point_detail.
+	// UserPointDetailStore defines operations for working with user_point_detail.
 	UserPointDetailStore interface {
-		// Find returns a user_money_point_detail from the db.
+		// Find returns a user_point_detail from the db.
 		List(*UserPointDetailListRequest) ([]*UserPointDetail, int64, error)
-		// Create persists a new UserPointDetail in the db.
+		// Create persists a new user_point_detail record in the db.
 		Create(*UserPointDetail) error
 	}
 )
 
-// TableName defines the user_money_point_detail table name in db
+// TableName defines the user_point_detail table name in db
 func (UserPointDetail) TableName() string {
 	return "t_user_point_detail"
 }
