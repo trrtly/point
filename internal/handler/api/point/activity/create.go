@@ -13,7 +13,7 @@ import (
 
 type Create struct {
 	// 用户 id
-	UID int64 `json:"uid" validate:"number"`
+	UID int64 `json:"uid,omitempty" validate:"number"`
 	// 微信 openid，针对未登录用户
 	Openid string `json:"openid"`
 	// 事件编号
