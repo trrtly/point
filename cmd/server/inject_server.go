@@ -36,8 +36,7 @@ func provideRouter(api api.Server) *fiber.App {
 // http server that is configured from the environment.
 func provideServer(app *fiber.App, config config.Config) *server.Server {
 	return &server.Server{
-		Addr: config.Server.Port,
-		Host: config.Server.Host,
+		Addr: config.Server.Host + ":" + config.Server.Port,
 		App:  app,
 	}
 }

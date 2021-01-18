@@ -11,7 +11,6 @@ import (
 // A Server defines parameters for running an HTTP server.
 type Server struct {
 	Addr string
-	Host string
 	App  *fiber.App
 }
 
