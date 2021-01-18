@@ -48,6 +48,6 @@ func (s Server) Handler(r fiber.Router) fiber.Router {
 	r.Post("/point/goods", goods.HandlerExchange(s.HD, s.Goods, s.Assets, s.Detail))
 	r.Get("/point/goods", goods.HandlerList(s.Goods, s.Assets))
 	r.Get("/point/details", detail.HandlerList(s.Detail))
-	r.Get("/wechat/bind", wechat.HandleBind(s.Detail))
+	r.Post("/wechat/bind", wechat.HandleBind(s.Detail))
 	return r
 }
