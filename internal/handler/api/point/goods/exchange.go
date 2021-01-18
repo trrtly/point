@@ -50,7 +50,7 @@ func HandlerExchange(
 		}
 		gid, err := hashid.DecodeWithError(req.GoodsYyid)
 		if err != nil {
-			return render.Fail(c, err)
+			return render.Fail(c, errors.New("商品 id 有误"))
 		}
 		egoods, err := goods.Find(uint32(gid[0]))
 		if err != nil {
