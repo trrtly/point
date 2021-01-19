@@ -1,10 +1,11 @@
 package activity
 
 import (
-	"errors"
 	"point/internal/core"
 	"point/internal/core/status"
 	"point/internal/handler/api/render"
+
+	"github.com/pkg/errors"
 
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
@@ -46,12 +47,12 @@ func HandlerCreate(
 		req := new(Create)
 
 		if err := c.BodyParser(req); err != nil {
-			return render.Fail(c, err)
+			return render.Fail(c, errors.Wrap(err, "参数解析失败"))
 		}
 
 		validate := validator.New()
 		if err := validate.Struct(req); err != nil {
-			return render.Fail(c, err)
+			return render.Fail(c, errors.Wrap(err, "参数验证失败"))
 		}
 		if req.UID <= 0 && req.WechatUserID <= 0 {
 			return render.Fail(c, errors.New("uid与openid不能同时为空"))
@@ -63,10 +64,10 @@ func HandlerCreate(
 					"request": req,
 				},
 			).Errorln("/api/point/activity: cannot find activity using special key")
-			return render.Fail(c, err)
+			return render.Fail(c, errors.Wrap(err, "活动不存在"))
 		}
 		if !activity.IsActivite() {
-			return render.Fail(c, errors.New("事件尚未发布或不在有效期内"))
+			return render.Fail(c, errors.Wrap(err, "事件尚未发布或不在有效期内"))
 		}
 		detail := &core.UserPointDetail{
 			UID:          req.UID,
@@ -100,7 +101,7 @@ func HandlerCreate(
 						"request": req,
 					},
 				).Errorln("/api/point/activity: 用户积分更新失败", err)
-				return render.Fail(c, errors.New("用户积分更新失败"))
+				return render.Fail(c, errors.Wrap(err, "用户积分更新失败"))
 			}
 		}
 

@@ -9,6 +9,7 @@ import (
 	"point/internal/handler/api/errors"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/sirupsen/logrus"
 )
 
 // indent the json-encoded API responses
@@ -115,6 +116,13 @@ func JSON(c *fiber.Ctx, v interface{}, status int) error {
 
 // Success reponse an json-encoded api success data
 func Success(c *fiber.Ctx, v interface{}) error {
+	logrus.WithFields(
+		logrus.Fields{
+			"uri":     string(c.Request().URI().RequestURI()),
+			"request": c.Request(),
+			"data":    v,
+		},
+	).Infoln("api success")
 	return JSON(c, &Response{
 		Code: http.StatusOK,
 		Data: v,
@@ -126,6 +134,14 @@ func Fail(c *fiber.Ctx, err error, code ...int64) error {
 	if len(code) == 0 {
 		code = append(code, errors.ApiError)
 	}
+	logrus.WithFields(
+		logrus.Fields{
+			"uri":     string(c.Request().URI().RequestURI()),
+			"request": c.Request(),
+			"err":     err,
+			"code":    code,
+		},
+	).Errorln("api fail")
 	return JSON(c, &Response{
 		Code: code[0],
 		Msg:  err.Error(),

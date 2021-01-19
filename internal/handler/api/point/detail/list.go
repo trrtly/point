@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
+	"github.com/pkg/errors"
 )
 
 type response struct {
@@ -45,15 +46,15 @@ func HandlerList(
 		req := new(core.UserPointDetailListRequest)
 
 		if err := c.QueryParser(req); err != nil {
-			return render.Fail(c, err)
+			return render.Fail(c, errors.Wrap(err, "参数解析失败"))
 		}
 		validate := validator.New()
 		if err := validate.Struct(req); err != nil {
-			return render.Fail(c, err)
+			return render.Fail(c, errors.Wrap(err, "参数验证失败"))
 		}
 		details, total, err := detail.List(req)
 		if err != nil {
-			return render.Fail(c, err)
+			return render.Fail(c, errors.Wrap(err, "获取积分明细失败"))
 		}
 
 		data := new(respData)

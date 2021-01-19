@@ -1,7 +1,6 @@
 package wechat
 
 import (
-	"fmt"
 	"point/internal/core"
 	"point/internal/handler/api/render"
 
@@ -9,7 +8,6 @@ import (
 
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
-	"github.com/sirupsen/logrus"
 )
 
 type Bind struct {
@@ -33,23 +31,17 @@ func HandleBind(
 	detail core.UserPointDetailStore,
 ) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		fmt.Println(c.Request())
 		req := new(Bind)
 		if err := c.BodyParser(req); err != nil {
-			return render.Fail(c, err)
+			return render.Fail(c, errors.Wrap(err, "参数解析失败"))
 		}
 		validate := validator.New()
 		if err := validate.Struct(req); err != nil {
-			return render.Fail(c, err)
+			return render.Fail(c, errors.Wrap(err, "参数验证失败"))
 		}
 		err := detail.BindUIDWechatUID(req.UID, req.WechatUserID)
 		if err != nil {
-			logrus.WithFields(
-				logrus.Fields{
-					"request": req,
-				},
-			).Errorln("/api/wechat/bind: 微信关联关系绑定失败", err)
-			return render.Fail(c, errors.New("绑定失败"))
+			return render.Fail(c, errors.Wrap(err, "绑定失败"))
 		}
 		return render.Success(c, req)
 	}
