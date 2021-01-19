@@ -30,7 +30,7 @@ var doc = `{
     "paths": {
         "/api/point/activity": {
             "post": {
-                "description": "添加事件积分，问卷事件 ` + "`" + `key` + "`" + `: ` + "`" + `question_answer` + "`" + `；页面浏览事件 ` + "`" + `key` + "`" + `: ` + "`" + `page_view` + "`" + `\n登录用户传 ` + "`" + `uid` + "`" + ` ，未登录用户传 ` + "`" + `openid` + "`" + `",
+                "description": "添加事件积分，问卷事件 ` + "`" + `key` + "`" + `: ` + "`" + `question_answer` + "`" + `；页面浏览事件 ` + "`" + `key` + "`" + `: ` + "`" + `page_view` + "`" + `\n登录用户传 ` + "`" + `uid` + "`" + ` ，未登录用户传 ` + "`" + `wechatUserId` + "`" + `",
                 "consumes": [
                     "application/json"
                 ],
@@ -271,10 +271,6 @@ var doc = `{
                     "description": "事件编号",
                     "type": "string"
                 },
-                "openid": {
-                    "description": "微信 openid，针对未登录用户",
-                    "type": "string"
-                },
                 "type": {
                     "description": "特例的类型 1 表示地域 2表示 角色  3表示产品  4表示医院  5表示特定数据\n问卷跟页面浏览都传 5",
                     "type": "integer"
@@ -286,6 +282,10 @@ var doc = `{
                 "val": {
                     "description": "特例数值",
                     "type": "string"
+                },
+                "wechatUserId": {
+                    "description": "微信 wechatUserId，针对未登录用户，wechat_user 表 id",
+                    "type": "integer"
                 }
             }
         },

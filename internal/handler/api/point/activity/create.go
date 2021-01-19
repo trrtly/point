@@ -14,8 +14,8 @@ import (
 type Create struct {
 	// 用户 id
 	UID int64 `json:"uid,omitempty" validate:"number"`
-	// 微信 openid，针对未登录用户
-	Openid string `json:"openid"`
+	// 微信 wechatUserId，针对未登录用户，wechat_user 表 id
+	WechatUserID int64 `json:"wechatUserId"`
 	// 事件编号
 	Key string `json:"key" validate:"required"`
 	// 特例的类型 1 表示地域 2表示 角色  3表示产品  4表示医院  5表示特定数据
@@ -27,7 +27,7 @@ type Create struct {
 
 // @Summary 添加事件积分
 // @Description 添加事件积分，问卷事件 `key`: `question_answer`；页面浏览事件 `key`: `page_view`
-// @Description 登录用户传 `uid` ，未登录用户传 `openid`
+// @Description 登录用户传 `uid` ，未登录用户传 `wechatUserId`
 // @Tags 事件积分
 // @Version 1.0
 // @Accept json
@@ -53,7 +53,7 @@ func HandlerCreate(
 		if err := validate.Struct(req); err != nil {
 			return render.Fail(c, err)
 		}
-		if req.UID <= 0 && req.Openid == "" {
+		if req.UID <= 0 && req.WechatUserID <= 0 {
 			return render.Fail(c, errors.New("uid与openid不能同时为空"))
 		}
 		activity, err := activity.FindEventKey(req.Key)
@@ -69,11 +69,11 @@ func HandlerCreate(
 			return render.Fail(c, errors.New("事件尚未发布或不在有效期内"))
 		}
 		detail := &core.UserPointDetail{
-			UID:        req.UID,
-			Openid:     req.Openid,
-			ActivityID: activity.ID,
-			Type:       core.ActivityTypeGain,
-			Status:     status.UserPointDetailArrived,
+			UID:          req.UID,
+			WechatUserID: req.WechatUserID,
+			ActivityID:   activity.ID,
+			Type:         core.ActivityTypeGain,
+			Status:       status.UserPointDetailArrived,
 		}
 		if activity.HasSpecial() {
 			aspecial, err := special.FindSVal(activity.ID, req.Val)

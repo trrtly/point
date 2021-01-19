@@ -8,7 +8,7 @@ type (
 	// UserPointDetail defines user_point_detail table
 	UserPointDetail struct {
 		UID               int64  `json:"-"`
-		Openid            string `json:"-"`
+		WechatUserID      int64  `json:"-"`
 		ActivityID        int32  `json:"-"`
 		ActivitySpecialID int32  `json:"-"`
 		GoodsID           int64  `json:"-"`

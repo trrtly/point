@@ -122,8 +122,12 @@ func Success(c *fiber.Ctx, v interface{}) error {
 }
 
 // Fail reponse an json-encoded api fail data
-func Fail(c *fiber.Ctx, err error) error {
+func Fail(c *fiber.Ctx, err error, code ...int64) error {
+	if len(code) == 0 {
+		code = append(code, errors.ApiError)
+	}
 	return JSON(c, &Response{
-		Msg: err.Error(),
+		Code: code[0],
+		Msg:  err.Error(),
 	}, http.StatusOK)
 }

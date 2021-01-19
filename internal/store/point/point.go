@@ -57,6 +57,6 @@ func (s *moneyStore) BindUIDWechatUID(uid, wechatUserID int64) error {
 	upd := map[string]interface{}{
 		"uid": uid,
 	}
-	return s.db.Debug().Model(&core.UserPointDetail{}).
+	return s.db.Model(&core.UserPointDetail{}).
 		Where("wechat_user_id = ?", wechatUserID).Updates(upd).Error
 }

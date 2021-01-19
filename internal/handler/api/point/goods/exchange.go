@@ -54,7 +54,7 @@ func HandlerExchange(
 		}
 		egoods, err := goods.Find(uint32(gid[0]))
 		if err != nil {
-			return render.Fail(c, err)
+			return render.Fail(c, errors.New("兑换商品不存在"))
 		}
 		if !egoods.IsActivite() {
 			return render.Fail(c, errors.New("商品尚未发布或不在有效期内"))
