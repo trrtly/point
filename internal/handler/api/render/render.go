@@ -118,8 +118,8 @@ func JSON(c *fiber.Ctx, v interface{}, status int) error {
 func Success(c *fiber.Ctx, v interface{}) error {
 	logrus.WithFields(
 		logrus.Fields{
-			"uri":     string(c.Request().URI().RequestURI()),
-			"request": c.Request(),
+			"uri":     c.Request().URI().String(),
+			"request": c.Request().String(),
 			"data":    v,
 		},
 	).Infoln("api success")
@@ -136,8 +136,8 @@ func Fail(c *fiber.Ctx, err error, code ...int64) error {
 	}
 	logrus.WithFields(
 		logrus.Fields{
-			"uri":     string(c.Request().URI().RequestURI()),
-			"request": c.Request(),
+			"uri":     c.Request().URI().String(),
+			"request": c.Request().String(),
 			"err":     err,
 			"code":    code,
 		},
