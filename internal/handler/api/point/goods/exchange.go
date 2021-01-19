@@ -64,10 +64,10 @@ func HandlerExchange(
 			return render.Fail(c, err)
 		}
 		if uassets.MoneyPoint < egoods.MoneyPoint {
-			return render.Fail(c, errors.New("消费积分不足"))
+			return render.Fail(c, errors.New("消费积分不足"), 5001)
 		}
 		if uassets.ServicePoint < egoods.ServicePoint {
-			return render.Fail(c, errors.New("服务积分不足"))
+			return render.Fail(c, errors.New("服务积分不足"), 5002)
 		}
 		detailm := &core.UserPointDetail{
 			UID:      req.UID,
@@ -88,6 +88,7 @@ func HandlerExchange(
 					"detailm": detailm,
 				},
 			).Errorln("/api/point/goods 创建积分详情失败", err)
+			return render.Fail(c, errors.New("兑换失败，请稍后重试"), 5003)
 		}
 
 		err = assets.DecrPoint(req.UID, detailm.MoneyPoint, detailm.ServicePoint)
@@ -99,7 +100,7 @@ func HandlerExchange(
 					"uassets": uassets,
 				},
 			).Errorln("/api/point/goods 用户积分资产扣除失败", err)
-			return render.Fail(c, errors.New("兑换失败，请稍后重试"))
+			return render.Fail(c, errors.New("兑换失败，请稍后重试"), 5003)
 		}
 
 		return render.Success(c, detailm)
