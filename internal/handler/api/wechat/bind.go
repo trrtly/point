@@ -1,6 +1,7 @@
 package wechat
 
 import (
+	"fmt"
 	"point/internal/core"
 	"point/internal/handler/api/render"
 
@@ -15,7 +16,7 @@ type Bind struct {
 	// 用户 id
 	UID int64 `json:"uid" validate:"required,number"`
 	// wechat_user 表 id
-	WechatUserID int64 `json:"wechatUserId" validate:"required"`
+	WechatUserID int64 `json:"wechatUserId" validate:"required,number"`
 }
 
 // @Summary 绑定微信关联关系
@@ -32,6 +33,7 @@ func HandleBind(
 	detail core.UserPointDetailStore,
 ) fiber.Handler {
 	return func(c *fiber.Ctx) error {
+		fmt.Println(c.Request())
 		req := new(Bind)
 		if err := c.BodyParser(req); err != nil {
 			return render.Fail(c, err)
