@@ -35,8 +35,12 @@ type (
 		List(*UserPointDetailListRequest) ([]*UserPointDetail, int64, error)
 		// Create persists a new user_point_detail record in the db.
 		Create(*UserPointDetail) error
-		// BindUIDWechatUID bind uid and wechat user id.
+		// BindUIDWechatUID bind uid and wechat_user_id.
 		BindUIDWechatUID(int64, int64) error
+		// HasBindUIDWechatUID find a record by uid and wechat_user_id.
+		HasBindUIDWechatUID(int64) (bool)
+		// FindMoneyServicePointSum find money service point sum by wechat_user_id.
+		FindMoneyServicePointSum(int64) (float64, float64, error)
 	}
 )
 

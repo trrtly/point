@@ -4,7 +4,10 @@ import (
 	"point/internal/core"
 	"point/internal/store/shared/db"
 
+	"github.com/pkg/errors"
+
 	"github.com/sirupsen/logrus"
+	"gorm.io/gorm"
 )
 
 // New returns a new UserStore.
@@ -47,7 +50,7 @@ func (s *moneyStore) Create(m *core.UserPointDetail) error {
 			logrus.Fields{
 				"data": m,
 			},
-		).Errorln("create UserPointDetail fail")
+		).Errorln("create UserPointDetail fail", res.Error)
 	}
 	return res.Error
 }
@@ -59,4 +62,31 @@ func (s *moneyStore) BindUIDWechatUID(uid, wechatUserID int64) error {
 	}
 	return s.db.Model(&core.UserPointDetail{}).
 		Where("wechat_user_id = ?", wechatUserID).Updates(upd).Error
+}
+
+// HasBindUIDWechatUID find a record by uid and wechat user id.
+func (s *moneyStore) HasBindUIDWechatUID(wechatUserID int64) bool {
+	out := &core.UserPointDetail{}
+	err := s.db.Model(&core.UserPointDetail{}).
+		Where("wechat_user_id = ?", wechatUserID).
+		Where("uid > ?", 0).
+		First(out).Error
+	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
+		return false
+	}
+	return true
+}
+
+// FindMoneyServicePointSum find a record by uid and wechat user id.
+func (s *moneyStore) FindMoneyServicePointSum(wechatUserID int64) (float64, float64, error) {
+	type result struct {
+		Money   float64
+		Service float64
+	}
+	out := &result{}
+	err := s.db.Model(&core.UserPointDetail{}).
+		Select("sum(service_point) as Service, sum(money_point) as Money").
+		Where("wechat_user_id = ?", wechatUserID).
+		First(out).Error
+	return out.Money, out.Service, err
 }

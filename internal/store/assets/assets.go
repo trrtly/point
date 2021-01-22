@@ -4,6 +4,7 @@ import (
 	"point/internal/core"
 	"point/internal/store/shared/db"
 
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -44,4 +45,17 @@ func (s *assetsStore) DecrPoint(uid int64, moneyPoint float64, servicePoint floa
 		"service_point": gorm.Expr("service_point - ?", servicePoint),
 	}
 	return s.db.Model(&core.UserAssets{}).Where("uid = ?", uid).Updates(upd).Error
+}
+
+// Create persists a new UserAssets in the db.
+func (s *assetsStore) Create(m *core.UserAssets) error {
+	res := s.db.Model(&core.UserAssets{}).Create(m)
+	if res.Error != nil {
+		logrus.WithFields(
+			logrus.Fields{
+				"data": m,
+			},
+		).Errorln("create UserAssets fail", res.Error)
+	}
+	return res.Error
 }
