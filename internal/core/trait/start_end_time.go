@@ -15,8 +15,7 @@ type (
 
 // IsStarted defines the StartEndTime is started
 func (a *StartEndTime) IsStarted() bool {
-	today := time.Now()
-	return today.After(a.StartTime)
+	return time.Now().After(a.StartTime)
 }
 
 // IsNotEnded defines the StartEndTime is not ended
@@ -24,8 +23,7 @@ func (a *StartEndTime) IsNotEnded() bool {
 	if a.EndTime.IsZero() {
 		return true
 	}
-	today := time.Now()
-	return today.Before(a.EndTime)
+	return time.Now().Before(a.EndTime)
 }
 
 // IsActivite defines the StartEndTime is activite

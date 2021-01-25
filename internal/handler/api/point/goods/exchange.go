@@ -66,7 +66,7 @@ func HandlerExchange(
 		detailm := &core.UserPointDetail{
 			UID:      req.UID,
 			Type:     core.ActivityTypeUse,
-			Status:   status.UserPointDetailArrived,
+			Status:   status.UserPointDetailApply,
 			GoodsID:  egoods.ID,
 			GoodsNum: req.GoodsNum,
 			Desc:     egoods.UserDetailDesc,
@@ -88,11 +88,14 @@ func HandlerExchange(
 					"request": req,
 					"detailm": detailm,
 				},
-			).Errorln("/api/point/goods 创建积分详情失败", err)
+			).Errorln("创建积分详情失败", err)
 			return render.Fail(c, errors.New("兑换失败，请稍后重试"), 5003)
 		}
 
-		err = assets.DecrPoint(req.UID, detailm.MoneyPoint, detailm.ServicePoint)
+		err = assets.DecrPoint(req.UID, uassets, &core.UserAssets{
+			MoneyPoint: detailm.MoneyPoint,
+			ServicePoint: detailm.ServicePoint,
+		})
 		if err != nil {
 			logrus.WithFields(
 				logrus.Fields{
@@ -100,7 +103,7 @@ func HandlerExchange(
 					"egoods":  egoods,
 					"uassets": uassets,
 				},
-			).Errorln("/api/point/goods 用户积分资产扣除失败", err)
+			).Errorln("用户积分资产扣除失败", err)
 			return render.Fail(c, errors.New("兑换失败，请稍后重试"), 5003)
 		}
 

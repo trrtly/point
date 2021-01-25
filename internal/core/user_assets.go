@@ -21,7 +21,7 @@ type (
 		// IncrPoint increment a user's money or service point or both
 		IncrPoint(int64, float64, float64) error
 		// DecrPoint decrement a user's money or service point or both
-		DecrPoint(int64, float64, float64) error
+		DecrPoint(int64, *UserAssets, *UserAssets) error
 	}
 )
 
