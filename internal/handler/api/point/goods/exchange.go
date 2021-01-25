@@ -63,12 +63,6 @@ func HandlerExchange(
 		if err != nil {
 			return render.Fail(c, err)
 		}
-		if uassets.MoneyPoint < egoods.MoneyPoint {
-			return render.Fail(c, errors.New("消费积分不足"), 5001)
-		}
-		if uassets.ServicePoint < egoods.ServicePoint {
-			return render.Fail(c, errors.New("服务积分不足"), 5002)
-		}
 		detailm := &core.UserPointDetail{
 			UID:      req.UID,
 			Type:     core.ActivityTypeUse,
@@ -79,6 +73,13 @@ func HandlerExchange(
 		}
 		detailm.MoneyPoint = egoods.MoneyPoint * float64(req.GoodsNum)
 		detailm.ServicePoint = egoods.ServicePoint * float64(req.GoodsNum)
+
+		if uassets.MoneyPoint < detailm.MoneyPoint {
+			return render.Fail(c, errors.New("消费积分不足"), 5001)
+		}
+		if uassets.ServicePoint < detailm.ServicePoint {
+			return render.Fail(c, errors.New("服务积分不足"), 5002)
+		}
 
 		err = detail.Create(detailm)
 		if err != nil {
