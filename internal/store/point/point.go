@@ -34,6 +34,7 @@ func (s *moneyStore) List(
 	} else {
 		sdb.Where("money_point > ?", 0)
 	}
+	sdb.Order("id desc")
 	err := sdb.Scopes(db.Paginate(r.Page, r.PageSize)).Find(&out).Error
 	if err != nil {
 		return nil, 0, err
