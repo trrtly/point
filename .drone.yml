@@ -32,3 +32,43 @@ trigger:
   - develop
   event:
   - push
+
+
+---
+kind: pipeline
+type: kubernetes
+name: publish-staging
+
+clone:
+  disable: true
+
+steps:
+
+- name: build
+  image: golang:1.15
+  commands:
+  - "go env -w GO111MODULE=on"
+  - "go env -w GOPROXY=https://goproxy.cn,direct"
+  - "go mod download"
+  - "bash ./scripts/build.sh"
+
+- name: deploy
+  image: drillster/drone-rsync
+  environment:
+    RSYNC_KEY:
+      from_secret: rsync_key
+  settings:
+    hosts: [ "10.23.6.127" ]
+    user: release-robot
+    source: ./release
+    target: /data/code/point
+    include: [ "point-server" ]
+    delete: true
+    script:
+      - "kubectl -n staging rollout restart deployment point"
+
+trigger:
+  branch:
+  - release
+  event:
+  - push
