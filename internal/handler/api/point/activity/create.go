@@ -94,6 +94,9 @@ func HandlerCreate(
 			return render.Success(c, detail)
 		}
 		if detail.UID > 0 {
+			if _, err := assets.FindOrCreate(req.UID); err != nil {
+				return render.Fail(c, errors.Wrap(err, "用户资产异常"))
+			}
 			err = assets.IncrPoint(detail.UID, detail.MoneyPoint, detail.ServicePoint)
 			if err != nil {
 				logrus.WithFields(

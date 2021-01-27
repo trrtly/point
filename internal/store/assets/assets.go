@@ -4,7 +4,7 @@ import (
 	"point/internal/core"
 	"point/internal/store/shared/db"
 
-	"github.com/sirupsen/logrus"
+	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
@@ -51,15 +51,22 @@ func (s *assetsStore) DecrPoint(uid int64, old, new *core.UserAssets) error {
 		Updates(upd).Error
 }
 
-// Create persists a new UserAssets in the db.
-func (s *assetsStore) Create(m *core.UserAssets) error {
-	res := s.db.Model(&core.UserAssets{}).Create(m)
-	if res.Error != nil {
-		logrus.WithFields(
-			logrus.Fields{
-				"data": m,
-			},
-		).Errorln("create UserAssets fail", res.Error)
+// FindOrCreate persists a new UserAssets in the db.
+func (s *assetsStore) FindOrCreate(uid int64) (*core.UserAssets, error) {
+	assets, err := s.Find(uid)
+	if err == nil {
+		return assets, nil
 	}
-	return res.Error
+	// 未知错误抛出
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, errors.Wrap(err, "用户资产异常")
+	}
+	assets = &core.UserAssets{
+		UID: uid,
+	}
+	err = s.db.Model(&core.UserAssets{}).Create(assets).Error
+	if err != nil {
+		return nil, errors.Wrap(err, "积分账户创建失败")
+	}
+	return assets, nil
 }

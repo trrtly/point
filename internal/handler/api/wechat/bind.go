@@ -5,7 +5,6 @@ import (
 	"point/internal/handler/api/render"
 
 	"github.com/pkg/errors"
-	"gorm.io/gorm"
 
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
@@ -46,20 +45,11 @@ func HandleBind(
 		if hasBind {
 			return render.Fail(c, errors.New("该用户已绑定过关联关系"))
 		}
-		_, err := assets.Find(req.UID)
-		// 是否存在资产记录
-		notHasAssets := errors.Is(err, gorm.ErrRecordNotFound)
-		if err != nil && !notHasAssets {
+		if _, err := assets.FindOrCreate(req.UID); err != nil {
 			return render.Fail(c, errors.Wrap(err, "用户资产异常"))
 		}
-		// 不存在则创建
-		if notHasAssets {
-			err = assets.Create(&core.UserAssets{
-				UID: req.UID,
-			})
-		}
 		// 绑定关联关系
-		err = detail.BindUIDWechatUID(req.UID, req.WechatUserID)
+		err := detail.BindUIDWechatUID(req.UID, req.WechatUserID)
 		if err != nil {
 			return render.Fail(c, errors.Wrap(err, "绑定失败"))
 		}
