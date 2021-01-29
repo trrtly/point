@@ -88,7 +88,7 @@ steps:
 - name: deploy
   image: plugins/docker
   settings:
-    repo: uhub.service.ucloud.cn/youyao/demo
+    repo: uhub.service.ucloud.cn/youyao/point
     registry: uhub.service.ucloud.cn
     auto_tag: true
     username:
