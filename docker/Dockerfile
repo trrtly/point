@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM uhub.service.ucloud.cn/youyao/ubuntu:20.04
 ENV GODEBUG netdns=go
 
 ADD release/point-server /usr/bin

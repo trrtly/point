@@ -69,3 +69,34 @@ trigger:
   - release
   event:
   - push
+
+---
+kind: pipeline
+type: kubernetes
+name: publish-prod
+
+steps:
+
+- name: build
+  image: golang:1.15
+  commands:
+  - "go env -w GO111MODULE=on"
+  - "go env -w GOPROXY=https://goproxy.cn,direct"
+  - "go mod download"
+  - "bash ./scripts/build.sh"
+
+- name: deploy
+  image: plugins/docker
+  settings:
+    repo: uhub.service.ucloud.cn/youyao/demo
+    registry: uhub.service.ucloud.cn
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    dockerfile: docker/Dockerfile
+
+trigger:
+  event:
+  - tag
