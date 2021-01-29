@@ -27,28 +27,32 @@ func (s *assetsStore) Find(uid int64) (*core.UserAssets, error) {
 }
 
 // IncrPoint increment a user's money or service point or both
-func (s *assetsStore) IncrPoint(uid int64, moneyPoint float64, servicePoint float64) error {
+func (s *assetsStore) IncrPoint(uid int64, old, new *core.UserAssets) error {
 	if uid <= 0 {
 		return nil
 	}
-	upd := map[string]interface{}{
-		"money_point":   gorm.Expr("money_point + ?", moneyPoint),
-		"service_point": gorm.Expr("service_point + ?", servicePoint),
+	data := map[string]interface{}{
+		"money_point":   gorm.Expr("money_point + ?", new.MoneyPoint),
+		"service_point": gorm.Expr("service_point + ?", new.ServicePoint),
 	}
-	return s.db.Model(&core.UserAssets{}).Where("uid = ?", uid).Updates(upd).Error
+	return s.updatePoint(uid, old, data)
 }
 
 // DecrPoint decrement a user's money or service point or both
 func (s *assetsStore) DecrPoint(uid int64, old, new *core.UserAssets) error {
-	upd := map[string]interface{}{
+	data := map[string]interface{}{
 		"money_point":   gorm.Expr("money_point - ?", new.MoneyPoint),
 		"service_point": gorm.Expr("service_point - ?", new.ServicePoint),
 	}
+	return s.updatePoint(uid, old, data)
+}
+
+func (s *assetsStore) updatePoint(uid int64, old *core.UserAssets, data map[string]interface{}) error {
 	return s.db.Model(&core.UserAssets{}).
 		Where("uid = ?", uid).
 		Where("money_point = ?", old.MoneyPoint).
 		Where("service_point = ?", old.ServicePoint).
-		Updates(upd).Error
+		Updates(data).Error
 }
 
 // FindOrCreate persists a new UserAssets in the db.

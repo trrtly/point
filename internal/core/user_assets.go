@@ -19,7 +19,7 @@ type (
 		// FindOrCreate create a new user assets record if not exist.
 		FindOrCreate(int64) (*UserAssets, error)
 		// IncrPoint increment a user's money or service point or both
-		IncrPoint(int64, float64, float64) error
+		IncrPoint(int64, *UserAssets, *UserAssets) error
 		// DecrPoint decrement a user's money or service point or both
 		DecrPoint(int64, *UserAssets, *UserAssets) error
 	}

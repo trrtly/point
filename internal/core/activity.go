@@ -24,6 +24,12 @@ type (
 		// FindEventKey returns a special event_key activity from the datastore.
 		FindEventKey(string) (*Activity, error)
 	}
+
+	// ActivityBll defines activity bll
+	ActivityBll interface {
+		// HasUserReachNumPreDayLimit persister user has reach num pre day limit
+		HasUserReachNumPreDayLimit(int64) bool
+	}
 )
 
 const (

@@ -2,14 +2,12 @@ package activity
 
 import (
 	"point/internal/core"
-	"point/internal/core/status"
 	"point/internal/handler/api/render"
 
 	"github.com/pkg/errors"
 
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
-	"github.com/sirupsen/logrus"
 )
 
 type Create struct {
@@ -59,11 +57,6 @@ func HandlerCreate(
 		}
 		activity, err := activity.FindEventKey(req.Key)
 		if err != nil {
-			logrus.WithFields(
-				logrus.Fields{
-					"request": req,
-				},
-			).Errorln("/api/point/activity: cannot find activity using special key")
 			return render.Fail(c, errors.Wrap(err, "活动不存在"))
 		}
 		if !activity.IsActivite() {
@@ -74,7 +67,7 @@ func HandlerCreate(
 			WechatUserID: req.WechatUserID,
 			ActivityID:   activity.ID,
 			Type:         core.ActivityTypeGain,
-			Status:       status.UserPointDetailArrived,
+			Status:       core.UserPointDetailArrived,
 		}
 		if activity.HasSpecial() {
 			aspecial, err := special.FindSVal(activity.ID, req.Val)
@@ -94,16 +87,15 @@ func HandlerCreate(
 			return render.Success(c, detail)
 		}
 		if detail.UID > 0 {
-			if _, err := assets.FindOrCreate(req.UID); err != nil {
+			uassets, err := assets.FindOrCreate(req.UID)
+			if err != nil {
 				return render.Fail(c, errors.Wrap(err, "用户资产异常"))
 			}
-			err = assets.IncrPoint(detail.UID, detail.MoneyPoint, detail.ServicePoint)
+			err = assets.IncrPoint(detail.UID, uassets, &core.UserAssets{
+				MoneyPoint:   detail.MoneyPoint,
+				ServicePoint: detail.ServicePoint,
+			})
 			if err != nil {
-				logrus.WithFields(
-					logrus.Fields{
-						"request": req,
-					},
-				).Errorln("/api/point/activity: 用户积分更新失败", err)
 				return render.Fail(c, errors.Wrap(err, "用户积分更新失败"))
 			}
 		}

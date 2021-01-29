@@ -91,3 +91,24 @@ func (s *moneyStore) FindMoneyServicePointSum(wechatUserID int64) (float64, floa
 		First(out).Error
 	return out.Money, out.Service, err
 }
+
+// CountActivityNumPreDay .
+func (s *moneyStore) CountActivityNumPreDay(uid int64, activity *core.Activity) (int64, error) {
+	var count int64
+	err := s.db.Model(&core.UserPointDetail{}).
+		Where("uid = ?", uid).
+		Where("activity_id = ?", activity.ID).
+		Count(&count).Error
+	return count, err
+}
+
+// CountSpecialNumPreDay .
+func (s *moneyStore) CountSpecialNumPreDay(uid int64, special *core.ActivitySpecial) (int64, error) {
+	var count int64
+	err := s.db.Model(&core.UserPointDetail{}).
+		Where("uid = ?", uid).
+		Where("activity_id = ?", special.ActivityID).
+		Where("activity_special_id = ?", special.ID).
+		Count(&count).Error
+	return count, err
+}

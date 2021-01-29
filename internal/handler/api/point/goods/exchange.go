@@ -2,7 +2,6 @@ package goods
 
 import (
 	"point/internal/core"
-	"point/internal/core/status"
 	"point/internal/handler/api/render"
 	"point/internal/pkg/hd"
 
@@ -66,7 +65,7 @@ func HandlerExchange(
 		detailm := &core.UserPointDetail{
 			UID:      req.UID,
 			Type:     core.ActivityTypeUse,
-			Status:   status.UserPointDetailApply,
+			Status:   core.UserPointDetailApply,
 			GoodsID:  egoods.ID,
 			GoodsNum: req.GoodsNum,
 			Desc:     egoods.UserDetailDesc,
@@ -93,7 +92,7 @@ func HandlerExchange(
 		}
 
 		err = assets.DecrPoint(req.UID, uassets, &core.UserAssets{
-			MoneyPoint: detailm.MoneyPoint,
+			MoneyPoint:   detailm.MoneyPoint,
 			ServicePoint: detailm.ServicePoint,
 		})
 		if err != nil {

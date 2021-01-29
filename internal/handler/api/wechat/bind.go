@@ -45,11 +45,12 @@ func HandleBind(
 		if hasBind {
 			return render.Fail(c, errors.New("该用户已绑定过关联关系"))
 		}
-		if _, err := assets.FindOrCreate(req.UID); err != nil {
+		uassets, err := assets.FindOrCreate(req.UID)
+		if err != nil {
 			return render.Fail(c, errors.Wrap(err, "用户资产异常"))
 		}
 		// 绑定关联关系
-		err := detail.BindUIDWechatUID(req.UID, req.WechatUserID)
+		err = detail.BindUIDWechatUID(req.UID, req.WechatUserID)
 		if err != nil {
 			return render.Fail(c, errors.Wrap(err, "绑定失败"))
 		}
@@ -57,7 +58,10 @@ func HandleBind(
 		if err != nil {
 			return render.Success(c, req)
 		}
-		err = assets.IncrPoint(req.UID, totalmoney, totalService)
+		err = assets.IncrPoint(req.UID, uassets, &core.UserAssets{
+			MoneyPoint:   totalmoney,
+			ServicePoint: totalService,
+		})
 		if err != nil {
 			return render.Fail(c, errors.Wrap(err, "积分添加失败"))
 		}

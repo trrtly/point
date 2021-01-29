@@ -38,10 +38,25 @@ type (
 		// BindUIDWechatUID bind uid and wechat_user_id.
 		BindUIDWechatUID(int64, int64) error
 		// HasBindUIDWechatUID find a record by uid and wechat_user_id.
-		HasBindUIDWechatUID(int64) (bool)
+		HasBindUIDWechatUID(int64) bool
 		// FindMoneyServicePointSum find money service point sum by wechat_user_id.
 		FindMoneyServicePointSum(int64) (float64, float64, error)
+		// CountActivityNumPreDay .
+		CountActivityNumPreDay(uid int64, activity *Activity) (int64, error)
+		// CountSpecialNumPreDay .
+		CountSpecialNumPreDay(uid int64, special *ActivitySpecial) (int64, error)
 	}
+)
+
+const (
+	// UserPointDetailDeleted 已删除
+	UserPointDetailDeleted = 0
+	// UserPointDetailApply 申请中
+	UserPointDetailApply = 1
+	// UserPointDetailArrived 已到账
+	UserPointDetailArrived = 2
+	// UserPointDetailExchanged 已兑换
+	UserPointDetailExchanged = 3
 )
 
 // TableName defines the user_point_detail table name in db
