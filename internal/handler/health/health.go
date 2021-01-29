@@ -7,8 +7,7 @@ import (
 )
 
 // Handler returns a new health handler.
-func Handler() *fiber.App {
-	r := fiber.New()
+func Handler(r fiber.Router) fiber.Router {
 	r.Get("/", func(c *fiber.Ctx) error {
 		return c.SendStatus(http.StatusOK)
 	})

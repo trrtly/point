@@ -7,6 +7,7 @@ import (
 	"point/cmd/server/config"
 
 	"point/internal/core"
+	"point/internal/pkg/hd"
 	"point/internal/server"
 
 	"github.com/joho/godotenv"
@@ -14,12 +15,13 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-// @title 优药积分系统 api
+// @title 优药积分服务
 // @version 1.0
 // @description 优药积分系统 api
 // @contact.name wenlong
 // @contact.url http://yy-git.youyao99.com/youyao/point
 // @contact.email wenlong.chen@youyaomedtech.com
+// @host http://point:8080
 func main() {
 	var envfile string
 	flag.StringVar(&envfile, "env-file", ".env", "Read in a file of environment variables")
@@ -85,17 +87,20 @@ func initLogging(c config.Config) {
 
 // application is the main struct for the point server.
 type application struct {
-	server *server.Server
-	assets core.UserAssetsStore
+	server  *server.Server
+	assets  core.UserAssetsStore
+	hashids *hd.HD
 }
 
 // newApplication creates a new application struct.
 func newApplication(
 	server *server.Server,
 	assets core.UserAssetsStore,
+	hashids *hd.HD,
 ) application {
 	return application{
-		assets: assets,
-		server: server,
+		assets:  assets,
+		server:  server,
+		hashids: hashids,
 	}
 }

@@ -1,34 +1,157 @@
 definitions:
   activity.Create:
     properties:
-      activityCode:
+      key:
         description: 事件编号
         type: string
-      specialCode:
-        description: 特例编号
-        type: string
-      specialVal:
+      type:
+        description: |-
+          特例的类型 1 表示地域 2表示 角色  3表示产品  4表示医院  5表示特定数据
+          问卷跟页面浏览都传 5
+        type: integer
+      uid:
+        description: 用户 id
+        type: integer
+      val:
         description: 特例数值
+        type: string
+      wechatUserId:
+        description: 微信 wechatUserId，针对未登录用户，wechat_user 表 id
+        type: integer
+    required:
+    - key
+    type: object
+  core.ExchangeGoods:
+    properties:
+      desc:
+        description: 商品描述
+        example: 每100的服务积分和100个消费积分可兑换100块钱
+        type: string
+      goods_name:
+        description: 商品名称
+        example: 兑换现金100
+        type: string
+      goods_pic:
+        description: 商品图片
+        example: http://coupons.quanduogo.com/ico.png
+        type: string
+      goods_type:
+        description: 商品类型 1表示 现金 2表示实物  3表示虚拟
+        example: 1
+        type: integer
+      money_point:
+        description: 消费积分
+        example: 100
+        type: number
+      service_point:
+        description: 服务积分
+        example: 100
+        type: number
+      yyid:
+        type: string
+    type: object
+  core.UserPointDetail:
+    properties:
+      created_at:
+        type: string
+      desc:
+        type: string
+      money_point:
+        type: number
+      service_point:
+        type: number
+      status:
+        type: integer
+      type:
+        type: integer
+      updated_at:
+        type: string
+      yyid:
+        type: string
+    type: object
+  detail.respData:
+    properties:
+      list:
+        description: 积分列表
+        items:
+          $ref: '#/definitions/core.UserPointDetail'
+        type: array
+      page:
+        description: 页码值
+        example: 1
+        type: integer
+      page_size:
+        description: 每页显示条数
+        example: 20
+        type: integer
+      total:
+        description: 总条数
+        example: 100
+        type: integer
+    type: object
+  detail.response:
+    properties:
+      code:
+        description: |-
+          `code` 错误码
+          全局错误码说明：
+          `1001` 用户不存在
+        example: 200
+        type: integer
+      data:
+        $ref: '#/definitions/detail.respData'
+      msg:
+        description: '`msg` 错误信息'
+        type: string
+    type: object
+  goods.Create:
+    properties:
+      goodsNum:
+        description: 商品数量
+        type: integer
+      goodsYyid:
+        description: 商品编号
         type: string
       uid:
         description: 用户 id
         type: integer
     required:
-    - activityCode
+    - goodsNum
+    - goodsYyid
     - uid
     type: object
-  page.Create:
+  goods.response:
     properties:
-      uid:
-        description: 用户id
+      code:
+        description: |-
+          `code` 错误码
+          全局错误码说明：
+          `1001` 用户不存在
+        example: 200
         type: integer
-      uri:
-        description: 页面路径的 `path` 部分，例如：`http://api.youyao.com/user/point`，则 `uri`
-          为 `user/point`
+      data:
+        properties:
+          list:
+            description: 商品列表
+            items:
+              $ref: '#/definitions/core.ExchangeGoods'
+            type: array
+          page:
+            description: 页码值
+            example: 1
+            type: integer
+          page_size:
+            description: 每页显示条数
+            example: 20
+            type: integer
+          total:
+            description: 总条数
+            example: 100
+            type: integer
+        type: object
+      msg:
+        description: '`msg` 错误信息'
         type: string
-    required:
-    - uid
-    - uri
     type: object
   render.Response:
     properties:
@@ -37,6 +160,7 @@ definitions:
           `code` 错误码
           全局错误码说明：
           `1001` 用户不存在
+        example: 200
         type: integer
       data:
         type: object
@@ -44,20 +168,35 @@ definitions:
         description: '`msg` 错误信息'
         type: string
     type: object
+  wechat.Bind:
+    properties:
+      uid:
+        description: 用户 id
+        type: integer
+      wechatUserId:
+        description: wechat_user 表 id
+        type: integer
+    required:
+    - uid
+    - wechatUserId
+    type: object
+host: http://point:8080
 info:
   contact:
     email: wenlong.chen@youyaomedtech.com
     name: wenlong
     url: http://yy-git.youyao99.com/youyao/point
   description: 优药积分系统 api
-  title: 优药积分系统 api
+  title: 优药积分服务
   version: "1.0"
 paths:
   /api/point/activity:
     post:
       consumes:
       - application/json
-      description: 添加事件积分
+      description: |-
+        添加事件积分，问卷事件 `key`: `question_answer`；页面浏览事件 `key`: `page_view`
+        登录用户传 `uid` ，未登录用户传 `wechatUserId`
       parameters:
       - description: 请求参数
         in: body
@@ -79,18 +218,92 @@ paths:
       summary: 添加事件积分
       tags:
       - 事件积分
-  /api/point/page:
+  /api/point/details:
+    get:
+      consumes:
+      - application/json
+      description: 获取积分明细列表
+      parameters:
+      - description: uid
+        in: query
+        name: uid
+        required: true
+        type: integer
+      - description: 是否获取服务积分，true：返回服务积分，false：返回消费积分
+        in: query
+        name: fetchService
+        required: true
+        type: boolean
+      - description: 当前页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页显示条数
+        in: query
+        name: pageSize
+        type: integer
+      - description: 类型 1：发放，2：使用， 0或不传为全部
+        in: query
+        name: type
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回值
+          schema:
+            $ref: '#/definitions/detail.response'
+        "400":
+          description: 失败返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+      summary: 获取积分明细列表
+      tags:
+      - 积分明细列表
+  /api/point/goods:
+    get:
+      consumes:
+      - application/json
+      description: 积分兑换商品列表
+      parameters:
+      - description: uid
+        in: query
+        name: uid
+        required: true
+        type: integer
+      - description: 当前页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页显示条数
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回值
+          schema:
+            $ref: '#/definitions/goods.response'
+        "400":
+          description: 失败返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+      summary: 积分兑换商品列表
+      tags:
+      - 兑换商品
     post:
       consumes:
       - application/json
-      description: 添加页面浏览积分
+      description: 积分兑换商品
       parameters:
       - description: 请求参数
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/page.Create'
+          $ref: '#/definitions/goods.Create'
       produces:
       - application/json
       responses:
@@ -102,7 +315,33 @@ paths:
           description: 失败返回值
           schema:
             $ref: '#/definitions/render.Response'
-      summary: 添加页面浏览积分
+      summary: 积分兑换商品
       tags:
-      - 页面浏览积分
+      - 兑换商品
+  /api/wechat/bind:
+    post:
+      consumes:
+      - application/json
+      description: 绑定微信关联关系
+      parameters:
+      - description: 请求参数
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/wechat.Bind'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+        "400":
+          description: 失败返回值
+          schema:
+            $ref: '#/definitions/render.Response'
+      summary: 绑定微信关联关系
+      tags:
+      - 事件积分
 swagger: "2.0"

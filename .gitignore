@@ -4,8 +4,11 @@
 *.out
 *.key
 .env
-.env.*
 release/
 scripts/*.go
 docker/**/data
 TODO*
+t.go
+vendor
+server
+.idea

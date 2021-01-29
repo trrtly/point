@@ -1,0 +1,102 @@
+kind: pipeline
+type: kubernetes
+name: publish-testing
+
+steps:
+
+- name: build
+  image: golang:1.15
+  commands:
+  - "go env -w GO111MODULE=on"
+  - "go env -w GOPROXY=https://goproxy.cn,direct"
+  - "go mod download"
+  - "bash ./scripts/build.sh"
+
+- name: deploy
+  image: drillster/drone-rsync
+  environment:
+    RSYNC_KEY:
+      from_secret: rsync_key
+  settings:
+    hosts: [ "10.23.80.124" ]
+    user: release-robot
+    source: ./release
+    target: /data/code/point
+    include: [ "point-server" ]
+    delete: true
+    script:
+      - "kubectl -n testing rollout restart deployment point"
+
+trigger:
+  branch:
+  - develop
+  event:
+  - push
+
+
+---
+kind: pipeline
+type: kubernetes
+name: publish-staging
+
+steps:
+
+- name: build
+  image: golang:1.15
+  commands:
+  - "go env -w GO111MODULE=on"
+  - "go env -w GOPROXY=https://goproxy.cn,direct"
+  - "go mod download"
+  - "bash ./scripts/build.sh"
+
+- name: deploy
+  image: drillster/drone-rsync
+  environment:
+    RSYNC_KEY:
+      from_secret: rsync_key
+  settings:
+    hosts: [ "10.23.6.127" ]
+    user: release-robot
+    source: ./release
+    target: /data/code/point
+    include: [ "point-server" ]
+    delete: true
+    script:
+      - "kubectl -n staging rollout restart deployment point"
+
+trigger:
+  branch:
+  - release
+  event:
+  - push
+
+---
+kind: pipeline
+type: kubernetes
+name: publish-prod
+
+steps:
+
+- name: build
+  image: golang:1.15
+  commands:
+  - "go env -w GO111MODULE=on"
+  - "go env -w GOPROXY=https://goproxy.cn,direct"
+  - "go mod download"
+  - "bash ./scripts/build.sh"
+
+- name: deploy
+  image: plugins/docker
+  settings:
+    repo: uhub.service.ucloud.cn/youyao/demo
+    registry: uhub.service.ucloud.cn
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    dockerfile: docker/Dockerfile
+
+trigger:
+  event:
+  - tag

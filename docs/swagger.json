@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "优药积分系统 api",
-        "title": "优药积分系统 api",
+        "title": "优药积分服务",
         "contact": {
             "name": "wenlong",
             "url": "http://yy-git.youyao99.com/youyao/point",
@@ -10,10 +10,11 @@
         },
         "version": "1.0"
     },
+    "host": "http://point:8080",
     "paths": {
         "/api/point/activity": {
             "post": {
-                "description": "添加事件积分",
+                "description": "添加事件积分，问卷事件 `key`: `question_answer`；页面浏览事件 `key`: `page_view`\n登录用户传 `uid` ，未登录用户传 `wechatUserId`",
                 "consumes": [
                     "application/json"
                 ],
@@ -51,9 +52,9 @@
                 }
             }
         },
-        "/api/point/page": {
-            "post": {
-                "description": "添加页面浏览积分",
+        "/api/point/details": {
+            "get": {
+                "description": "获取积分明细列表",
                 "consumes": [
                     "application/json"
                 ],
@@ -61,9 +62,120 @@
                     "application/json"
                 ],
                 "tags": [
-                    "页面浏览积分"
+                    "积分明细列表"
                 ],
-                "summary": "添加页面浏览积分",
+                "summary": "获取积分明细列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "uid",
+                        "name": "uid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "是否获取服务积分，true：返回服务积分，false：返回消费积分",
+                        "name": "fetchService",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "当前页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页显示条数",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "类型 1：发放，2：使用， 0或不传为全部",
+                        "name": "type",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回值",
+                        "schema": {
+                            "$ref": "#/definitions/detail.response"
+                        }
+                    },
+                    "400": {
+                        "description": "失败返回值",
+                        "schema": {
+                            "$ref": "#/definitions/render.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/point/goods": {
+            "get": {
+                "description": "积分兑换商品列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "兑换商品"
+                ],
+                "summary": "积分兑换商品列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "uid",
+                        "name": "uid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "当前页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页显示条数",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回值",
+                        "schema": {
+                            "$ref": "#/definitions/goods.response"
+                        }
+                    },
+                    "400": {
+                        "description": "失败返回值",
+                        "schema": {
+                            "$ref": "#/definitions/render.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "积分兑换商品",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "兑换商品"
+                ],
+                "summary": "积分兑换商品",
                 "parameters": [
                     {
                         "description": "请求参数",
@@ -71,7 +183,47 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/page.Create"
+                            "$ref": "#/definitions/goods.Create"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回值",
+                        "schema": {
+                            "$ref": "#/definitions/render.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "失败返回值",
+                        "schema": {
+                            "$ref": "#/definitions/render.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/wechat/bind": {
+            "post": {
+                "description": "绑定微信关联关系",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "事件积分"
+                ],
+                "summary": "绑定微信关联关系",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/wechat.Bind"
                         }
                     }
                 ],
@@ -96,20 +248,156 @@
         "activity.Create": {
             "type": "object",
             "required": [
-                "activityCode",
-                "uid"
+                "key"
             ],
             "properties": {
-                "activityCode": {
+                "key": {
                     "description": "事件编号",
                     "type": "string"
                 },
-                "specialCode": {
-                    "description": "特例编号",
+                "type": {
+                    "description": "特例的类型 1 表示地域 2表示 角色  3表示产品  4表示医院  5表示特定数据\n问卷跟页面浏览都传 5",
+                    "type": "integer"
+                },
+                "uid": {
+                    "description": "用户 id",
+                    "type": "integer"
+                },
+                "val": {
+                    "description": "特例数值",
                     "type": "string"
                 },
-                "specialVal": {
-                    "description": "特例数值",
+                "wechatUserId": {
+                    "description": "微信 wechatUserId，针对未登录用户，wechat_user 表 id",
+                    "type": "integer"
+                }
+            }
+        },
+        "core.ExchangeGoods": {
+            "type": "object",
+            "properties": {
+                "desc": {
+                    "description": "商品描述",
+                    "type": "string",
+                    "example": "每100的服务积分和100个消费积分可兑换100块钱"
+                },
+                "goods_name": {
+                    "description": "商品名称",
+                    "type": "string",
+                    "example": "兑换现金100"
+                },
+                "goods_pic": {
+                    "description": "商品图片",
+                    "type": "string",
+                    "example": "http://coupons.quanduogo.com/ico.png"
+                },
+                "goods_type": {
+                    "description": "商品类型 1表示 现金 2表示实物  3表示虚拟",
+                    "type": "integer",
+                    "example": 1
+                },
+                "money_point": {
+                    "description": "消费积分",
+                    "type": "number",
+                    "example": 100
+                },
+                "service_point": {
+                    "description": "服务积分",
+                    "type": "number",
+                    "example": 100
+                },
+                "yyid": {
+                    "type": "string"
+                }
+            }
+        },
+        "core.UserPointDetail": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "money_point": {
+                    "type": "number"
+                },
+                "service_point": {
+                    "type": "number"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "yyid": {
+                    "type": "string"
+                }
+            }
+        },
+        "detail.respData": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "description": "积分列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/core.UserPointDetail"
+                    }
+                },
+                "page": {
+                    "description": "页码值",
+                    "type": "integer",
+                    "example": 1
+                },
+                "page_size": {
+                    "description": "每页显示条数",
+                    "type": "integer",
+                    "example": 20
+                },
+                "total": {
+                    "description": "总条数",
+                    "type": "integer",
+                    "example": 100
+                }
+            }
+        },
+        "detail.response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "`code` 错误码\n全局错误码说明：\n`1001` 用户不存在",
+                    "type": "integer",
+                    "example": 200
+                },
+                "data": {
+                    "$ref": "#/definitions/detail.respData"
+                },
+                "msg": {
+                    "description": "`msg` 错误信息",
+                    "type": "string"
+                }
+            }
+        },
+        "goods.Create": {
+            "type": "object",
+            "required": [
+                "goodsNum",
+                "goodsYyid",
+                "uid"
+            ],
+            "properties": {
+                "goodsNum": {
+                    "description": "商品数量",
+                    "type": "integer"
+                },
+                "goodsYyid": {
+                    "description": "商品编号",
                     "type": "string"
                 },
                 "uid": {
@@ -118,19 +406,43 @@
                 }
             }
         },
-        "page.Create": {
+        "goods.response": {
             "type": "object",
-            "required": [
-                "uid",
-                "uri"
-            ],
             "properties": {
-                "uid": {
-                    "description": "用户id",
-                    "type": "integer"
+                "code": {
+                    "description": "`code` 错误码\n全局错误码说明：\n`1001` 用户不存在",
+                    "type": "integer",
+                    "example": 200
                 },
-                "uri": {
-                    "description": "页面路径的 `path` 部分，例如：`http://api.youyao.com/user/point`，则 `uri` 为 `user/point`",
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "list": {
+                            "description": "商品列表",
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/core.ExchangeGoods"
+                            }
+                        },
+                        "page": {
+                            "description": "页码值",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "page_size": {
+                            "description": "每页显示条数",
+                            "type": "integer",
+                            "example": 20
+                        },
+                        "total": {
+                            "description": "总条数",
+                            "type": "integer",
+                            "example": 100
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "`msg` 错误信息",
                     "type": "string"
                 }
             }
@@ -140,7 +452,8 @@
             "properties": {
                 "code": {
                     "description": "`code` 错误码\n全局错误码说明：\n`1001` 用户不存在",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 200
                 },
                 "data": {
                     "type": "object"
@@ -148,6 +461,23 @@
                 "msg": {
                     "description": "`msg` 错误信息",
                     "type": "string"
+                }
+            }
+        },
+        "wechat.Bind": {
+            "type": "object",
+            "required": [
+                "uid",
+                "wechatUserId"
+            ],
+            "properties": {
+                "uid": {
+                    "description": "用户 id",
+                    "type": "integer"
+                },
+                "wechatUserId": {
+                    "description": "wechat_user 表 id",
+                    "type": "integer"
                 }
             }
         }

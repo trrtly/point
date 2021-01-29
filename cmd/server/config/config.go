@@ -2,6 +2,7 @@ package config
 
 import (
 	"point/internal/store/shared/db"
+	"point/internal/pkg/hd"
 
 	"github.com/kelseyhightower/envconfig"
 	"gopkg.in/yaml.v2"
@@ -13,13 +14,14 @@ type (
 		Server   Server
 		Logging  Logging
 		Database db.Config
+		Hashids  hd.Config
 	}
 
 	// Server provides the server configuration.
 	Server struct {
 		Addr  string `envconfig:"-"`
-		Host  string `envconfig:"POINT_SERVER_HOST" default:"localhost:8080"`
-		Port  string `envconfig:"POINT_SERVER_PORT" default:":8080"`
+		Host  string `envconfig:"POINT_SERVER_HOST" default:"localhost"`
+		Port  string `envconfig:"POINT_SERVER_PORT" default:"8080"`
 		Proto string `envconfig:"POINT_SERVER_PROTO" default:"http"`
 	}
 
