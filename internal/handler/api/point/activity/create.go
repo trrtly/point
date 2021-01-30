@@ -60,7 +60,7 @@ func HandlerCreate(
 			return render.Fail(c, errors.Wrap(err, "活动不存在"))
 		}
 		if !activity.IsActivite() {
-			return render.Fail(c, errors.Wrap(err, "事件尚未发布或不在有效期内"))
+			return render.Fail(c, errors.New("事件尚未发布或不在有效期内"))
 		}
 		detail := &core.UserPointDetail{
 			UID:          req.UID,
