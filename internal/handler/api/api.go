@@ -11,6 +11,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
 type Server struct {
@@ -43,6 +44,7 @@ func New(
 // Handler defines api handler
 func (s Server) Handler(r fiber.Router) fiber.Router {
 	r.Use(logger.New())
+	r.Use(recover.New())
 	r.Get("/assets", assets.HandleFind(s.Assets))
 	r.Post("/point/activity", activity.HandlerCreate(s.Activity, s.Special, s.Detail, s.Assets))
 	r.Post("/point/goods", goods.HandlerExchange(s.HD, s.Goods, s.Assets, s.Detail))
