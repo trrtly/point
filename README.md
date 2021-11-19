@@ -1,12 +1,12 @@
 # 项目概述
 
-* 产品名称：优药积分服务
+* 产品名称：积分服务
 * 项目代号：point
-* 官方地址：<http://yy-git.youyao99.com/youyao/point>
+* 官方地址：<https://github.com/trrtly/point>
 
 ## 运行环境要求
 
-* Golang 1.15.0+
+* Golang 1.17.0+
 
 ## 开发环境部署/安装
 
@@ -16,10 +16,10 @@
 
 #### 1. 克隆源代码
 
-克隆 `http://yy-git.youyao99.com/youyao/point.git` 源代码到本地：
+克隆源代码到本地：
 
 ```bash
-git clone http://yy-git.youyao99.com/youyao/point.git
+git clone git@github.com:trrtly/point.git
 ```
 
 #### 2. 生成配置文件
